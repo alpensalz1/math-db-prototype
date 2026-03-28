@@ -40,6 +40,46 @@
     #root {
       min-height: 100vh;
     }
+
+    @media (max-width: 768px) {
+      .navbar-inner {
+        flex-wrap: wrap !important;
+        height: auto !important;
+        padding: 10px 0 !important;
+        gap: 8px !important;
+      }
+      .navbar-right {
+        width: 100% !important;
+        margin-left: 0 !important;
+      }
+      .navbar-search {
+        flex: 1 !important;
+        width: auto !important;
+        min-width: 0 !important;
+      }
+      .sort-row {
+        flex-wrap: wrap !important;
+      }
+      .card-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .detail-container {
+        padding: 20px 12px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar-inner {
+        gap: 6px !important;
+      }
+      .nav-buttons {
+        gap: 2px !important;
+      }
+      .nav-buttons button {
+        padding: 5px 8px !important;
+        font-size: 12px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -118,7 +158,7 @@
       {
         id: 1, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
         questionNumber: 1, questionLabel: "第1問", difficulty: 4,
-        problemText: "座標平面上の点 A(0,0), B(0,1), C(1,1), D(1,0) を考える。実数 0 < t < 1 に対して、線分 AB, BC, CD を t:(1-t) に内分する点をそれぞれ Pt, Qt, Rt とし、線分 PtQt, QtRt を t:(1-t) に内分する点をそれぞれ St, Tt とする。さらに、線分 StTt を t:(1-t) に内分する点を Ut とする。また、点 A を U0、点 D を U1 とする。(1) 点 Ut の座標を求めよ。(2) t が 0 <= t <= 1 の範囲を動くときに点 Ut が描く曲線と、線分 AD で囲まれた部分の面積を求めよ。(3) a を 0 < a < 1 を満たす実数とする。t が 0 <= t <= a の範囲を動くときに点 Ut が描く曲線の長さを、a の多項式の形で求めよ。",
+        problemText: "座標平面上の点 A(0,0), B(0,1), C(1,1), D(1,0) を考える。実数 0 < t < 1 に対して、線分 AB, BC, CD を t:(1-t) に内分する点をそれぞれ Pt, Qt, Rt とし、線分 PtQt, QtRt を t:(1-t) に内分する点をそれぞれ St, Tt とする。さらに、線分 StTt を t:(1-t) に内分する点を Ut とする。また、点 A を U0、点 D を U1 とする。(1) 点 Ut の座標を求めよ。(2) t が 0 <= t <= 1 の範囲を動くときに点 Ut が描か曲線と、線分 AD で囲まれた部分の面積を求めよ。(3) a を 0 < a < 1 を満たす実数とする。t が 0 <= t <= a の範囲を動かときに点 Ut が描か���線の長さを、a の多項式の形で求めよ。",
         tagIds: [8, 2, 20, 34, 35, 41],
         youtubeLinks: [],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
@@ -134,7 +174,7 @@
       {
         id: 3, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
         questionNumber: 3, questionLabel: "第3問", difficulty: 3,
-        problemText: "平行四辺形 ABCD において、角ABC = pi/6、AB = a、BC = b、a <= b とする。次の条件を満たす長方形 EFGH を考え、その面積を S とする。条件：点 A, B, C, D はそれぞれ辺 EF, FG, GH, HE 上にある。(1) 角BCG = theta とするとき、S を a, b, theta を用いて表せ。(2) S のとりうる値の最大値を a, b を用いて表せ。",
+        problemText: "平行四辺形 ABCD において、角ABC = pi/2、AB = a、BC = b、a <= b とする。次の条件を満たす長方形 EFGH を考え、その面積を S とする。条件：点 A, B, C, D はそれぞれ辺 EF, FG, GH, HE 上にある。(1) 角BCG = theta とするとき、S を a, b, theta を用いて表せ。(2) S のとりうる値の最大値を a, b を用いて表せ。",
         tagIds: [13, 9, 22, 47],
         youtubeLinks: [],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
@@ -150,7 +190,7 @@
       {
         id: 5, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
         questionNumber: 5, questionLabel: "第5問", difficulty: 5,
-        problemText: "n を2以上の整数とする。1からnまでの数字が書かれた札が各1枚ずつ合計n枚ぁり、横一列におかれている。1以上(n-1)以下の整数 i に対して、次の操作(Ti)を考える。(Ti) 左からi番目の札の数字が左から(i+1)番目の札の数字よりも大きければ、これら2枚の札の位置を入れかえる。最初の状態において札の数字は左から A1, A2, ..., An であったとする。この状態から(n-1)回の操作 T1, T2, ..., T(n-1) を順に行った後、続けて(n-1)回の操作 T(n-1), ..., T2, T1 を順に行ったところ、札の数字は左から 1, 2, ..., n と小さい順に並んだ。(1) A1 と A2 のうち少なくとも一方は2以下であることを示せ。(2) 最初の状態としてありうる札の数字の並び方の総数を cn とする。n が4以上のとき、cn を c(n-1) と c(n-2) を用いて表せ。",
+        problemText: "n を2以上の整数とする。1からnまでの数字が書かよた札が各1枚ずつ合計n枚あり、横一列におかれている。1以上(n-1)以下の整数 i に対して、次の操作(Ti)を考える。(Ti) 左からi番目の札の数字が左から(i+1)番目の札の数字よりも大きければ、これら2枚の札の位置を入れかえる。最初の状態において札の数字は左から A1, A2, ..., An であったとする。この状態から(n-1)回の操作 T1, T2, ..., T(n-1) を順に行った後、続して(n-1)回の操作 T(n-1), ..., T2, T1 を順に行ったところ、札の数字は左から 1, 2, ..., n と小さい順に並んだ。(1) A1 と A2 のうち少なくとも一方は2以下であることを示せ。(2) 最初の状態としてありうる札の数字の並び方の総数を cn とする。n が4以上のとき、cn を c(n-1) と c(n-2) を用いて表せ。",
         tagIds: [11, 29, 48, 40, 44],
         youtubeLinks: [],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
@@ -158,7 +198,7 @@
       {
         id: 6, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
         questionNumber: 6, questionLabel: "第6問", difficulty: 5,
-        problemText: "複素数平面上の点 1/2 を中心とする半径 1/2 の円の周から原点を除いた曲線を C とする。(1) 曲線 C 上の複素数 z に対し、1/z の実部は1であることを示せ。(2) alpha, beta を曲線 C 上の直異なる複素数とするとき、1/alpha^2 + 1/beta^2 がとりうる範囲を複素数平面上に図示せよ。(3) gamma を(2)で求めた範囲に属さない複素数とするとき、1/gamma の実部がとりうる値の最大値と最小値を求めよ。",
+        problemText: "複素数平面上の点 1/2 を$��心とする半径 1/2 の円の周から原点を除いた曲線を C とする。(1) 曲線 C 上の複素数 z に対し、1/z の実部は1であることを示せ。(2) alpha, beta を曲線 C 上の相異なる複素数とするとき、1/alpha^2 + 1/beta^2 がとりうる範囲を複素数平面上に図示せよ。(3) gamma を(2)で求めた範囲に属さない複素数とするとき、1/gamma の実部がとりうる値の最大値と最小値を求めよ。",
         tagIds: [7, 25, 48, 40, 49],
         youtubeLinks: [],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
@@ -233,7 +273,7 @@
 
     // ─── コンポーネント ──────────────────────────────────────
 
-    // タグバル
+    // タグピル
     const TagPill = ({ tag, selected, onClick, small }) => {
       const color = tag.layer === 1 ? C.tagField : tag.layer === 2 ? C.tagTech : C.tagProp;
       return (
@@ -398,8 +438,8 @@
 
       // ─── ナビバー ──────────────────
       const Navbar = () => (
-        <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "0 20px", position: "sticky", top: 0, zIndex: 100 }}>
-          <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", alignItems: "center", height: 56, gap: 16 }}>
+        <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "0 12px", position: "sticky", top: 0, zIndex: 100 }}>
+          <div className="navbar-inner" style={{ maxWidth: 1400, margin: "0 auto", display: "flex", alignItems: "center", height: 56, gap: 16 }}>
             
             <div
               onClick={() => { setPage("home"); setSelectedTags([]); setSelectedUnis([]); setSelectedDifficulties([]); setSearchQuery(""); }}
@@ -409,7 +449,7 @@
             </div>
 
             
-            <div style={{ display: "flex", gap: 4 }}>
+            <div className="nav-buttons" style={{ display: "flex", gap: 4 }}>
               {[
                 { label: "ホーム", key: "home" },
                 { label: "ブラインド特訓", key: "blind-start" },
@@ -434,9 +474,10 @@
               ))}
             </div>
 
-            <div style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center" }}>
+            <div className="navbar-right" style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center" }}>
               
               <input
+                className="navbar-search"
                 type="text"
                 placeholder="検索..."
                 value={searchQuery}
@@ -484,7 +525,7 @@
 
           
           {showFilter && (
-            <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "20px", marginTop: 0 }}>
+            <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "16px 12px", marginTop: 0 }}>
               <div style={{ maxWidth: 1400, margin: "0 auto" }}>
                 
                 <div style={{ marginBottom: 20 }}>
@@ -546,10 +587,10 @@
           )}
 
           
-          <div style={{ maxWidth: 1400, margin: "0 auto", padding: "20px" }}>
+          <div style={{ maxWidth: 1400, margin: "0 auto", padding: "20px 12px" }}>
             
-            <div style={{ marginBottom: 20, display: "flex", gap: 8, alignItems: "center" }}>
-              <span style={{ color: C.textMuted, fontSize: 13 }}>ソート:</span>
+            <div className="sort-row" style={{ marginBottom: 20, display: "flex", gap: 8, alignItems: "center", overflowX: "auto", WebkitOverflowScrolling: "touch", paddingBottom: 4 }}>
+              <span style={{ color: C.textMuted, fontSize: 13, whiteSpace: "nowrap", flexShrink: 0 }}>ソート:</span>
               {[
                 { label: "難易度（高→低）", key: "difficulty-desc" },
                 { label: "難易度（低→高）", key: "difficulty-asc" },
@@ -569,6 +610,8 @@
                     cursor: "pointer",
                     fontWeight: 500,
                     transition: "all 0.15s",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
                   }}
                 >
                   {item.label}
@@ -582,7 +625,7 @@
             </div>
 
             
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, paddingBottom: 40 }}>
+            <div className="card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, paddingBottom: 40 }}>
               {filtered.map((p) => (
                 <ProblemCard key={p.id} problem={p} onClick={() => openDetail(p)} />
               ))}
@@ -604,7 +647,7 @@
           <div style={{ background: C.bg, minHeight: "100vh" }}>
             <Navbar />
 
-            <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 20px" }}>
+            <div className="detail-container" style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 20px" }}>
               
               <button
                 onClick={() => setPage("home")}
@@ -807,7 +850,7 @@
           <div style={{ background: C.bg, minHeight: "100vh" }}>
             <Navbar />
 
-            <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 20px" }}>
+            <div className="detail-container" style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 20px" }}>
               <button
                 onClick={() => setPage("home")}
                 style={{
