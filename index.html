@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数超DB - 大学入試数学データベース</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #0f0f1a;
+      color: #eaeaea;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Noto Sans", "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic Pro", sans-serif;
+      line-height: 1.5;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1a1a2e;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #3a3a55;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4a4a65;
+    }
+
+    #root {
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React and React-DOM from CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel Standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    // ─── ダミーデータ ───────────────────────────────────────
+    const TAGS = [
+      { id: 1, name: "二次関数", layer: 1, color: "#6366f1" },
+      { id: 2, name: "微分法(数III)", layer: 1, color: "#6366f1" },
+      { id: 3, name: "確率", layer: 1, color: "#6366f1" },
+      { id: 4, name: "整数の性質", layer: 1, color: "#6366f1" },
+      { id: 5, name: "ベクトル", layer: 1, color: "#6366f1" },
+      { id: 6, name: "数列", layer: 1, color: "#6366f1" },
+      { id: 7, name: "積分法(数III)", layer: 1, color: "#6366f1" },
+      { id: 8, name: "複素数平面", layer: 1, color: "#6366f1" },
+      { id: 9, name: "図形と方程式", layer: 1, color: "#6366f1" },
+      { id: 10, name: "三角関数", layer: 1, color: "#6366f1" },
+      { id: 20, name: "逆像法", layer: 2, color: "#3b82f6" },
+      { id: 21, name: "対称性の利用", layer: 2, color: "#3b82f6" },
+      { id: 22, name: "パラメータ分離", layer: 2, color: "#3b82f6" },
+      { id: 23, name: "数学的帰納法", layer: 2, color: "#3b82f6" },
+      { id: 24, name: "同値変形", layer: 2, color: "#3b82f6" },
+      { id: 25, name: "図形的解釈", layer: 2, color: "#3b82f6" },
+      { id: 26, name: "置換積分の見抜き", layer: 2, color: "#3b82f6" },
+      { id: 27, name: "合同式", layer: 2, color: "#3b82f6" },
+      { id: 28, name: "背理法", layer: 2, color: "#3b82f6" },
+      { id: 29, name: "漸化式の特性方程式", layer: 2, color: "#3b82f6" },
+      { id: 40, name: "初見殺し", layer: 3, color: "#f97316" },
+      { id: 41, name: "計算量ヘビー", layer: 3, color: "#f97316" },
+      { id: 42, name: "誘導なし", layer: 3, color: "#f97316" },
+      { id: 43, name: "典型問題", layer: 3, color: "#f97316" },
+      { id: 44, name: "思考力重視", layer: 3, color: "#f97316" },
+      { id: 45, name: "場合分け地獄", layer: 3, color: "#f97316" },
+      { id: 46, name: "発想一発", layer: 3, color: "#f97316" },
+      { id: 47, name: "複合分野", layer: 3, color: "#f97316" },
+      { id: 48, name: "証明問題", layer: 3, color: "#f97316" },
+      { id: 49, name: "時間法棒", layer: 3, color: "#f97316" },
+    ];
+
+    const UNIVERSITIES = [
+      { id: 1, name: "東京大学", short: "東大", color: "#dc2626" },
+      { id: 2, name: "京都大学", short: "京大", color: "#2563eb" },
+      { id: 3, name: "大阪大学", short: "阪大", color: "#7c3aed" },
+      { id: 4, name: "東北大学", short: "東北大", color: "#059669" },
+      { id: 5, name: "北海道大学", short: "北大", color: "#0891b2" },
+      { id: 6, name: "一橋大学", short: "一橋", color: "#d97706" },
+      { id: 7, name: "東京科学大学", short: "東科大", color: "#4f46e5" },
+      { id: 8, name: "九州大学", short: "九大", color: "#be185d" },
+    ];
+
+    const PROBLEMS = [
+      {
+        id: 1, examId: 1, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
+        questionNumber: 3, questionLabel: "第3問", difficulty: 4,
+        problemText: "xy平面上の領域 D = \\{(x,y) \\mid x^2 + y^2 \\leq 1\\} において、f(x,y) = x^2 + 2xy + 3y^2 の最大値と最小値を求めよ。",
+        solutionHint: "x = r\\cos\\theta, y = r\\sin\\theta と置換し、三角関数の合成を利用する。",
+        solutionMethod: "f(r,\\theta) = r^2(1 + \\sin 2\\theta + 2\\sin^2\\theta) = r^2(2 - \\cos 2\\theta + \\sin 2\\theta) と変形。r = 1 のとき最大・最小となるので、g(\\theta) = 2 - \\cos 2\\theta + \\sin 2\\theta の最大・最小を求める。",
+        solutionFull: "三角関数の合成により g(\\theta) = 2 + \\sqrt{2}\\sin(2\\theta - \\pi/4) と変形できる。\n\n最大値：\\theta = 3\\pi/8 のとき f = 2 + \\sqrt{2}\n最小値：\\theta = 7\\pi/8 のとき f = 0（原点）\n\nよって、最大値は 2 + \\sqrt{2}、最小値は 0。",
+        answerSummary: "最大値 2+√2、最小値 0",
+        tagIds: [2, 10, 20, 25, 41],
+        youtubeLinks: [
+          { channel: "ヨビノリ", desc: "東大2025 第3問 解説", startSec: 754, url: "https://youtube.com/watch?v=example1" },
+          { channel: "古賀真輝", desc: "2025東大理系数学", startSec: 1320, url: "https://youtube.com/watch?v=example2" },
+        ],
+      },
+      {
+        id: 2, examId: 2, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
+        questionNumber: 5, questionLabel: "第5問", difficulty: 5,
+        problemText: "正の整数 n に対して、a_n = \\sum_{k=0}^{n} \\binom{2n}{2k} 3^k を求めよ。",
+        solutionHint: "二項定理で (1+√3)^{2n} と (1-√3)^{2n} を考える。",
+        solutionMethod: "(1+x)^{2n} の展開で x = √3 と x = -√3 を代入し、偶数次の項を取り出す。",
+        solutionFull: "(1+\\sqrt{3})^{2n} = \\sum_{k=0}^{2n} \\binom{2n}{k}(\\sqrt{3})^k\n\n(1-\\sqrt{3})^{2n} = \\sum_{k=0}^{2n} \\binom{2n}{k}(-\\sqrt{3})^k\n\n辺々加えると偶数次の項のみ残り、\n\na_n = \\frac{(1+\\sqrt{3})^{2n} + (1-\\sqrt{3})^{2n}}{2} = \\frac{(4+2\\sqrt{3})^n + (4-2\\sqrt{3})^n}{2}",
+        answerSummary: "aₙ = {(4+2√3)ⁿ + (4-2√3)ⁿ} / 2",
+        tagIds: [4, 6, 23, 44, 42],
+        youtubeLinks: [],
+      },
+      {
+        id: 3, examId: 3, universityId: 2, year: 2025, examType: "前期", examCategory: "理系",
+        questionNumber: 2, questionLabel: "第2問", difficulty: 3,
+        problemText: "a を正の実数とする。曲線 y = e^{-x} と直線 y = e^{-a}(x - a + 1) および y 軸で囲まれた部分の面積 S(a) を求めよ。",
+        solutionHint: "曲線の接線が直線の式であることに気づく（x = a での接線）。",
+        solutionMethod: "y = e^{-x} の x = a における接線は y = -e^{-a}(x-a) + e^{-a} = e^{-a}(-x+a+1)。問題の直線と一致する。よって S(a) = ∫_0^a (e^{-x} - e^{-a}(−x+a+1)) dx。",
+        solutionFull: "S(a) = \\int_0^a \\left(e^{-x} - e^{-a}(-x+a+1)\\right) dx\n\n= [-e^{-x}]_0^a - e^{-a}[-\\frac{x^2}{2}+ax+x]_0^a\n\n= (1 - e^{-a}) - e^{-a} \\cdot \\frac{a^2}{2}\n\n= 1 - e^{-a}(1 + \\frac{a^2}{2})",
+        answerSummary: "S(a) = 1 - e^(-a)(1 + a²/2)",
+        tagIds: [7, 26, 43],
+        youtubeLinks: [
+          { channel: "鳥海先生", desc: "京大2025理系 第2問", startSec: 480, url: "https://youtube.com/watch?v=example3" },
+        ],
+      },
+      {
+        id: 4, examId: 4, universityId: 2, year: 2024, examType: "前期", examCategory: "理系",
+        questionNumber: 6, questionLabel: "第6問", difficulty: 5,
+        problemText: "複素数平面上で |z| = 1 を満たす z に対し、w = z + 1/z とおく。w が描く軌跡を求めよ。また、|w - 2i| の最大値を求めよ。",
+        solutionHint: "z = cosθ + isinθ とおくと、w = 2cosθ となるが、これは実軸上の区間 [-2, 2] となる。|w-2i| は幾何的に解釈する。",
+        solutionMethod: "z = e^{iθ} とおくと w = e^{iθ} + e^{-iθ} = 2cosθ。θが実数全体を動くとき、w は実数で -2 ≤ w ≤ 2。",
+        solutionFull: "w = 2\\cos\\theta より、w の軌跡は実軸上の線分 [-2, 2]。\n\n|w - 2i| = |2\\cos\\theta - 2i| = \\sqrt{4\\cos^2\\theta + 4} = 2\\sqrt{\\cos^2\\theta + 1}\n\n\\cos^2\\theta の最大値は 1（θ=0, π のとき）\n\n最大値 = 2\\sqrt{2}（w = ±2 のとき）",
+        answerSummary: "軌跡: [-2,2]上の線分、最大値: 2√2",
+        tagIds: [8, 25, 21, 43],
+        youtubeLinks: [],
+      },
+      {
+        id: 5, examId: 5, universityId: 3, year: 2025, examType: "前期", examCategory: "理系",
+        questionNumber: 1, questionLabel: "第1問", difficulty: 2,
+        problemText: "3つのサイコロを同時に投げるとき、出た目の積が6の倍数になる確率を求めよ。",
+        solutionHint: "余事象「積が6の倍数でない」を考える。積が6の倍数 ⇔ 積が2の倍数かつ3の倍数。",
+        solutionMethod: "P(6の倍数) = 1 - P(6の倍数でない) = 1 - P(奇数) - P(3の倍数でない) + P(奇数かつ3の倍数でない)。包除原理を使う。",
+        solutionFull: "A: 積が偶数、B: 積が3の倍数とする。求める確率は P(A∩B)。\n\nP(Aᶜ) = (3/6)³ = 1/8（全部奇数）\nP(Bᶜ) = (4/6)³ = 8/27（3の倍数が出ない）\nP(Aᶜ∩Bᶜ) = (2/6)³ = 1/27（奇数かつ3の倍数でない = {1,5}のみ）\n\nP(A∩B) = 1 - P(Aᶜ) - P(Bᶜ) + P(Aᶜ∩Bᶜ)\n= 1 - 1/8 - 8/27 + 1/27 = 1 - 1/8 - 7/27 = 121/216",
+        answerSummary: "121/216",
+        tagIds: [3, 43, 45],
+        youtubeLinks: [
+          { channel: "数学太郎", desc: "阪大2025 確率", startSec: 0, url: "https://youtube.com/watch?v=example4" },
+        ],
+      },
+      {
+        id: 6, examId: 6, universityId: 4, year: 2025, examType: "前期", examCategory: "理系",
+        questionNumber: 4, questionLabel: "第4問", difficulty: 4,
+        problemText: "f(x) = x³ - 3x とする。方程式 f(f(x)) = 0 の実数解の個数を求めよ。",
+        solutionHint: "f(f(x)) = 0 ⇔ f(x) が f(t) = 0 の解。まず f(t) = 0 を解き、それぞれの値に対して f(x) = t の解の個数を調べる。",
+        solutionMethod: "f(t) = t³ - 3t = t(t² - 3) = 0 より t = 0, ±√3。\nf(x) = 0、f(x) = √3、f(x) = -√3 それぞれの実数解の個数を、f(x) のグラフから読み取る。",
+        solutionFull: "f'(x) = 3x² - 3 = 3(x-1)(x+1)\n極大値 f(-1) = 2、極小値 f(1) = -2\n\nf(x) = 0：x³ - 3x = 0 → x = 0, ±√3 （3個）\nf(x) = √3 ≈ 1.73：-2 < √3 < 2 なので3傋\nf(x) = -√3 ≈ -1.73：-2 < -√3 なので3傋\n\nただし重複を確認する必要がある。\nf(0) = 0、f(±√3) = 0 より、f(x)=0 の解は f(f(x))=0 の解にも含まれる。\n\n3つの方程式の解の総数 = 3 + 3 + 3 = 9。重複がないことを確認して、答えは 9個。",
+        answerSummary: "9個",
+        tagIds: [2, 9, 22, 40, 44],
+        youtubeLinks: [],
+      },
+      {
+        id: 7, examId: 7, universityId: 6, year: 2024, examType: "前期", examCategory: "文系",
+        questionNumber: 1, questionLabel: "第1問", difficulty: 3,
+        problemText: "n を2以上の正の整数とする。n² + n + 1 が3の倍数でないことを示せ。",
+        solutionHint: "n を3で割った余りで場合分けする（合同式）。",
+        solutionMethod: "n ≡ 0, 1, 2 (mod 3) の3通りで n² + n + 1 mod 3 を計算する。",
+        solutionFull: "n ≡ 0 (mod 3) のとき：n² + n + 1 ≡ 0 + 0 + 1 ≡ 1 (mod 3)\nn ≡ 1 (mod 3) のとき：n² + n + 1 ≡ 1 + 1 + 1 ≡ 3 ≡ 0 (mod 3)... \n\n【修正】n ≡ 1 のとき 1 + 1 + 1 = 3 ≡ 0。\n\nこれは3の倍数になるので、命題は偽。\n\n実際には n=1 のとき n²+n+1 = 3 で3の倍数。\n→ 出題意図の確認が必要な問題。",
+        answerSummary: "合同式による場合分けで示す",
+        tagIds: [4, 27, 48, 43],
+        youtubeLinks: [],
+      },
+      {
+        id: 8, examId: 8, universityId: 5, year: 2025, examType: "前期", examCategory: "理系",
+        questionNumber: 2, questionLabel: "第2問", difficulty: 3,
+        problemText: "空間内に4点 A(1,0,0), B(0,2,0), C(0,0,3), D(1,1,1) がある。三角形ABCの面積と、点Dから平面ABCに下ろした垂線の足Hの座標を求めよ。",
+        solutionHint: "AB×AC の外積で法線ベクトルと面積を求め、DHが法線方向であることを利用する。",
+        solutionMethod: "AB = (-1,2,0), AC = (-1,0,3)。外積 AB×AC = (6,3,2)。面積 = |AB×AC|/2。H = D + t·n（nは法線単位ベクトル）で平面上の条件から t を決定。",
+        solutionFull: "AB × AC = (2·3 - 0·0, 0·(-1) - (-1)·3, (-1)·0 - 2·(-1)) = (6, 3, 2)\n\n面積 = |AB×AC|/2 = √(36+9+4)/2 = 7/2\n\n平面の方程式：6(x-1) + 3(y-0) + 2(z-0) = 0 → 6x + 3y + 2z = 6\n\nDから平面への距離 d = |6·1 + 3·1 + 2·1 - 6|/√(36+9+4) = 5/7\n\nH = D - d·(6,3,2)/7 = (1,1,1) - (5/49)(6,3,2) = (19/49, 34/49, 39/49)",
+        answerSummary: "面積 7/2、H = (19/49, 34/49, 39/49)",
+        tagIds: [5, 25, 41, 43],
+        youtubeLinks: [
+          { channel: "ヨビノリ", desc: "北大2025 ベクトル", startSec: 200, url: "https://youtube.com/watch?v=example5" },
+        ],
+      },
+      {
+        id: 9, examId: 9, universityId: 7, year: 2025, examType: "前期", examCategory: "理系",
+        questionNumber: 3, questionLabel: "第3問", difficulty: 5,
+        problemText: "数列 {a_n} を a_1 = 1, a_{n+1} = a_n + \\frac{1}{a_n} (n ≥ 1) で定める。\\lim_{n→∞} \\frac{a_n}{\\sqrt{n}} を求めよ。",
+        solutionHint: "a_{n+1}² = a_n² + 2 + 1/a_n² に注目し、b_n = a_n² とおいて漸近挙動を調べる。",
+        solutionMethod: "b_n = a_n² とおくと b_{n+1} = b_n + 2 + 1/b_n。n が大きいとき 1/b_n → 0 なので b_n ≈ 2n。よって a_n ≈ √(2n)。",
+        solutionFull: "b_n = a_n² とおく。\nb_{n+1} = (a_n + 1/a_n)² = a_n² + 2 + 1/a_n² = b_n + 2 + 1/b_n\n\nテレスコープ和：b_n = b_1 + 2(n-1) + Σ(1/b_k)\nb_1 = 1 なので b_n = 2n - 1 + Σ(1/b_k)\n\nb_n ≥ 2n - 1 より Σ(1/b_k) ≤ Σ1/(2k-1) = O(log n)\n\nよって b_n/n → 2、すなわち a_n²/n → 2\n\n∴ lim a_n/√n = √2",
+        answerSummary: "√2",
+        tagIds: [6, 29, 44, 42, 40],
+        youtubeLinks: [],
+      },
+      {
+        id: 10, examId: 10, universityId: 8, year: 2024, examType: "前期", examCategory: "理系",
+        questionNumber: 1, questionLabel: "第1問", difficulty: 2,
+        problemText: "sin²θ + cos²θ = 1 を利用して、sin⁴θ + cos⁴θ の最小値を求めよ。",
+        solutionHint: "t = sin²θ とおいて t の関数として最小値問題に帰着させる。",
+        solutionMethod: "sin⁴θ + cos⁴θ = (sin²θ)² + (cos²θ)² = (sin²θ + cos²θ)² - 2sin²θcos²θ = 1 - sin²(2θ)/2。",
+        solutionFull: "sin⁴θ + cos⁴θ = (sin²θ + cos²θ)² - 2sin²θcos²θ\n= 1 - 2sin²θcos²θ\n= 1 - sin²(2θ)/2\n\nsin²(2θ) の最大値は 1（2θ = π/2 のとき）\n\nよって最小値 = 1 - 1/2 = 1/2",
+        answerSummary: "1/2",
+        tagIds: [10, 21, 43, 46],
+        youtubeLinks: [],
+      },
+    ];
+
+    // ─── ユーティリティ ─────────────────────────────────────
+    const getTag = (id) => TAGS.find((t) => t.id === id);
+    const getUni = (id) => UNIVERSITIES.find((u) => u.id === id);
+    const Stars = ({ n }) => (
+      <span style={{ color: "#fbbf24", letterSpacing: 1 }}>
+        {"★".repeat(n)}{"☆".repeat(5 - n)}
+      </span>
+    );
+
+    const formatTime = (sec) => {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}:${s.toString().padStart(2, "0")}`;
+    };
+
+    // ─── スタイル定数 ────────────────────────────────────────
+    const C = {
+      bg: "#0f0f1a",
+      card: "#1a1a2e",
+      cardHover: "#222240",
+      surface: "#16213e",
+      accent: "#e94560",
+      accentSoft: "#e9456033",
+      blue: "#3b82f6",
+      text: "#eaeaea",
+      textMuted: "#8888aa",
+      border: "#2a2a45",
+      tagTech: "#3b82f6",
+      tagProp: "#f97316",
+      tagField: "#6366f1",
+      star: "#fbbf24",
+      green: "#22c55e",
+    };
+
+    // ─── コンポーネント ──────────────────────────────────────
+
+    // タグピル
+    const TagPill = ({ tag, selected, onClick, small }) => {
+      const color = tag.layer === 1 ? C.tagField : tag.layer === 2 ? C.tagTech : C.tagProp;
+      return (
+        <button
+          onClick={onClick}
+          style={{
+            background: selected ? color : `${color}22`,
+            color: selected ? "#fff" : color,
+            border: `1px solid ${selected ? color : `${color}55`}`,
+            borderRadius: 20,
+            padding: small ? "2px 10px" : "5px 14px",
+            fontSize: small ? 11 : 13,
+            cursor: "pointer",
+            fontWeight: 500,
+            transition: "all 0.15s",
+            whiteSpace: "nowrap",
+          }}
+        >
+          #{tag.name}
+        </button>
+      );
+    };
+
+    // 問題カード
+    const ProblemCard = ({ problem, onClick }) => {
+      const uni = getUni(problem.universityId);
+      const tags = problem.tagIds.map(getTag).filter(Boolean).slice(0, 3);
+      const hasVideo = problem.youtubeLinks.length > 0;
+
+      return (
+        <div
+          onClick={onClick}
+          style={{
+            background: C.card,
+            borderRadius: 12,
+            padding: 0,
+            cursor: "pointer",
+            transition: "all 0.2s",
+            border: `1px solid ${C.border}`,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = C.cardHover; e.currentTarget.style.transform = "translateY(-2px)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = C.card; e.currentTarget.style.transform = "translateY(0)"; }}
+        >
+          {/* 大学カラーバー */}
+          <div style={{ height: 4, background: uni?.color || C.accent }} />
+
+          <div style={{ padding: "14px 16px" }}>
+            {/* ヘッダー */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <span style={{ color: uni?.color, fontWeight: 700, fontSize: 13 }}>
+                {uni?.short} {problem.year} {problem.examType}
+              </span>
+              <span style={{ color: C.textMuted, fontSize: 12 }}>{problem.questionLabel}</span>
+            </div>
+
+            {/* 問題文プレビュー */}
+            <p style={{ color: C.text, fontSize: 13, lineHeight: 1.6, margin: "0 0 12px 0", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+              {problem.problemText.replace(/\\\\/g, "").replace(/\\[a-z]+/g, "").replace(/[{}^_]/g, "").slice(0, 120)}...
+            </p>
+
+            {/* 難易度 */}
+            <div style={{ marginBottom: 8 }}>
+              <Stars n={problem.difficulty} />
+              <span style={{ color: C.textMuted, fontSize: 11, marginLeft: 8 }}>難易度 {problem.difficulty}/5</span>
+            </div>
+
+            {/* タグ */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: hasVideo ? 8 : 0 }}>
+              {tags.map((tag) => (
+                <TagPill key={tag.id} tag={tag} small />
+              ))}
+            </div>
+
+            {/* 動画バッジ */}
+            {hasVideo && (
+              <div style={{ color: C.accent, fontSize: 12, fontWeight: 600 }}>
+                ▶ 動画解説あり（{problem.youtubeLinks.length}本）
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    // ─── メインアプル ────────────────────────────────────────
+    function App() {
+      const [page, setPage] = useState("home");
+      const [selectedProblem, setSelectedProblem] = useState(null);
+      const [searchQuery, setSearchQuery] = useState("");
+      const [selectedTags, setSelectedTags] = useState([]);
+      const [selectedUnis, setSelectedUnis] = useState([]);
+      const [selectedDifficulties, setSelectedDifficulties] = useState([]);
+      const [sortBy, setSortBy] = useState("difficulty-desc");
+      const [blindProblem, setBlindProblem] = useState(null);
+      const [blindRevealed, setBlindRevealed] = useState(false);
+      const [revealStep, setRevealStep] = useState(0);
+      const [showFilter, setShowFilter] = useState(false);
+
+      // フィルタリング
+      const filtered = useMemo(() => {
+        let result = [...PROBLEMS];
+
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          result = result.filter((p) => {
+            const uni = getUni(p.universityId);
+            return (
+              p.problemText.toLowerCase().includes(q) ||
+              uni?.name.includes(q) ||
+              uni?.short.includes(q) ||
+              p.tagIds.some((tid) => getTag(tid)?.name.includes(q))
+            );
+          });
+        }
+
+        if (selectedTags.length > 0) {
+          result = result.filter((p) => selectedTags.every((tid) => p.tagIds.includes(tid)));
+        }
+
+        if (selectedUnis.length > 0) {
+          result = result.filter((p) => selectedUnis.includes(p.universityId));
+        }
+
+        if (selectedDifficulties.length > 0) {
+          result = result.filter((p) => selectedDifficulties.includes(p.difficulty));
+        }
+
+        result.sort((a, b) => {
+          switch (sortBy) {
+            case "difficulty-asc": return a.difficulty - b.difficulty;
+            case "difficulty-desc": return b.difficulty - a.difficulty;
+            case "year-desc": return b.year - a.year || b.questionNumber - a.questionNumber;
+            case "year-asc": return a.year - b.year || a.questionNumber - b.questionNumber;
+            default: return b.difficulty - a.difficulty;
+          }
+        });
+
+        return result;
+      }, [searchQuery, selectedTags, selectedUnis, selectedDifficulties, sortBy]);
+
+      const toggleTag = (id) => setSelectedTags((prev) => prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]);
+      const toggleUni = (id) => setSelectedUnis((prev) => prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]);
+      const toggleDifficulty = (d) => setSelectedDifficulties((prev) => prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]);
+
+      const startBlind = () => {
+        const pool = filtered.length > 0 ? filtered : PROBLEMS;
+        const p = pool[Math.floor(Math.random() * pool.length)];
+        setBlindProblem(p);
+        setBlindRevealed(false);
+        setRevealStep(0);
+        setPage("blind");
+      };
+
+      const openDetail = (p) => {
+        setSelectedProblem(p);
+        setRevealStep(0);
+        setPage("detail");
+      };
+
+      // ─── ナビバー ──────────────────
+      const Navbar = () => (
+        <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "0 20px", position: "sticky", top: 0, zIndex: 100 }}>
+          <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", alignItems: "center", height: 56, gap: 16 }}>
+            {/* ロゴ */}
+            <div
+              onClick={() => { setPage("home"); setSelectedTags([]); setSelectedUnis([]); setSelectedDifficulties([]); setSearchQuery(""); }}
+              style={{ color: C.accent, fontWeight: 800, fontSize: 20, cursor: "pointer", whiteSpace: "nowrap", letterSpacing: -0.5 }}
+            >
+              数超 DB
+            </div>
+
+            {/* ナビタブ */}
+            <div style={{ display: "flex", gap: 4 }}>
+              {[
+                { label: "ホーム", key: "home" },
+                { label: "ブラインド特訓", key: "blind-start" },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => item.key === "blind-start" ? startBlind() : setPage(item.key)}
+                  style={{
+                    background: page === item.key ? C.accent : "transparent",
+                    color: page === item.key ? "#fff" : C.textMuted,
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "6px 14px",
+                    fontSize: 13,
+                    cursor: "pointer",
+                    fontWeight: 600,
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center" }}>
+              {/* 検索 */}
+              <input
+                type="text"
+                placeholder="検索..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  background: C.card,
+                  color: C.text,
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 8,
+                  padding: "8px 12px",
+                  fontSize: 13,
+                  width: 200,
+                  transition: "all 0.2s",
+                }}
+                onFocus={(e) => { e.target.style.borderColor = C.accent; e.target.style.boxShadow = `0 0 0 2px ${C.accentSoft}`; }}
+                onBlur={(e) => { e.target.style.borderColor = C.border; e.target.style.boxShadow = "none"; }}
+              />
+
+              {/* フィルタボタン */}
+              <button
+                onClick={() => setShowFilter(!showFilter)}
+                style={{
+                  background: showFilter ? C.accent : C.card,
+                  color: showFilter ? "#fff" : C.textMuted,
+                  border: `1px solid ${showFilter ? C.accent : C.border}`,
+                  borderRadius: 8,
+                  padding: "8px 12px",
+                  fontSize: 13,
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  transition: "all 0.15s",
+                }}
+              >
+                フィルタ
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+
+      // ─── ホームページ ──────────────────
+      const HomePage = () => (
+        <div style={{ background: C.bg, minHeight: "100vh", paddingTop: 16 }}>
+          <Navbar />
+
+          {/* フィルタパネル */}
+          {showFilter && (
+            <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "20px", marginTop: 0 }}>
+              <div style={{ maxWidth: 1400, margin: "0 auto" }}>
+                {/* 大学フィルタ */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>大学</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {UNIVERSITIES.map((uni) => (
+                      <TagPill
+                        key={uni.id}
+                        tag={{ ...uni, layer: 1 }}
+                        selected={selectedUnis.includes(uni.id)}
+                        onClick={() => toggleUni(uni.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* 難易度フィルタ */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>難易度</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {[1, 2, 3, 4, 5].map((d) => (
+                      <button
+                        key={d}
+                        onClick={() => toggleDifficulty(d)}
+                        style={{
+                          background: selectedDifficulties.includes(d) ? C.accent : C.card,
+                          color: selectedDifficulties.includes(d) ? "#fff" : C.textMuted,
+                          border: `1px solid ${selectedDifficulties.includes(d) ? C.accent : C.border}`,
+                          borderRadius: 6,
+                          padding: "6px 14px",
+                          fontSize: 13,
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          transition: "all 0.15s",
+                        }}
+                      >
+                        <Stars n={d} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* タグフィルタ */}
+                <div>
+                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>タグ</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {TAGS.slice(0, 20).map((tag) => (
+                      <TagPill
+                        key={tag.id}
+                        tag={tag}
+                        selected={selectedTags.includes(tag.id)}
+                        onClick={() => toggleTag(tag.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* メインコンテンツ */}
+          <div style={{ maxWidth: 1400, margin: "0 auto", padding: "20px" }}>
+            {/* ソート */}
+            <div style={{ marginBottom: 20, display: "flex", gap: 8, alignItems: "center" }}>
+              <span style={{ color: C.textMuted, fontSize: 13 }}>ソート:</span>
+              {[
+                { label: "難易度（高→低）", key: "difficulty-desc" },
+                { label: "難易度（低→高）", key: "difficulty-asc" },
+                { label: "年度（新→旧）", key: "year-desc" },
+                { label: "年度（旧→新）", key: "year-asc" },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => setSortBy(item.key)}
+                  style={{
+                    background: sortBy === item.key ? C.accent : C.card,
+                    color: sortBy === item.key ? "#fff" : C.textMuted,
+                    border: `1px solid ${sortBy === item.key ? C.accent : C.border}`,
+                    borderRadius: 6,
+                    padding: "6px 12px",
+                    fontSize: 12,
+                    cursor: "pointer",
+                    fontWeight: 500,
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            {/+ 件数 */}
+            <div style={{ color: C.textMuted, marginBottom: 16, fontSize: 12 }}>
+              {filtered.length} 件の問題
+            </div>
+
+            {/* カードグリッド - FIXED minmax(280px, 1fr) */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, paddingBottom: 40 }}>
+              {filtered.map((p) => (
+                <ProblemCard key={p.id} problem={p} onClick={() => openDetail(p)} />
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+
+      // ─── 詳細ページ ──────────────────
+      const DetailPage = () => {
+        const p = selectedProblem;
+        if (!p) return null;
+
+        const uni = getUni(p.universityId);
+        const tags = p.tagIds.map(getTag).filter(Boolean);
+        const totalSteps = 4;
+
+        return (
+          <div style={{ background: C.bg, minHeight: "100vh" }}>
+            <Navbar />
+
+            <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 20px" }}>
+              {/* ヘッダー */}
+              <button
+                onClick={() => setPage("home")}
+                style={{
+                  background: "transparent",
+                  color: C.accent,
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: 13,
+                  marginBottom: 20,
+                  fontWeight: 600,
+                }}
+              >
+                ← ホームに戻る
+              </button>
+
+              {/* タイトル */}
+              <div style={{ marginBottom: 24, borderBottom: `1px solid ${C.border}`, paddingBottom: 20 }}>
+                <div style={{ color: uni?.color, fontWeight: 700, fontSize: 14, marginBottom: 8 }}>
+                  {uni?.name} {p.year} {p.examType} / {p.examCategory}
+                </div>
+                <h1 style={{ color: C.text, fontSize: 24, fontWeight: 800, margin: "0 0 12px 0" }}>
+                  {p.questionLabel}
+                </h1>
+                <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
+                  <Stars n={p.difficulty} />
+                  <span style={{ color: C.textMuted, fontSize: 12 }}>難易度 {p.difficulty}/5</span>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {tags.map((tag) => (
+                    <TagPill key={tag.id} tag={tag} small />
+                  ))}
+                </div>
+              </div>
+
+              {/* 進捗インジケータ */}
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                  {["問題のみ", "解き方", "解法", "解答"].map((label, i) => (
+                    <div
+                      key={i}
+                      onClick={() => setRevealStep(i)}
+                      style={{
+                        flex: 1,
+                        height: 4,
+                        background: revealStep >= i ? C.accent : C.card,
+                        borderRadius: 2,
+                        cursor: "pointer",
+                        transition: "all 0.2s",
+                      }}
+                    />
+                  ))}
+                </div>
+                <div style={{ color: C.textMuted, fontSize: 12 }}>
+                  {["問題のみ", "解き方", "解法", "解答"][revealStep]}
+                </div>
+              </div>
+
+              {/* コンテンツ */}
+              <div style={{ background: C.card, borderRadius: 12, padding: 20, marginBottom: 24, border: `1px solid ${C.border}` }}>
+                {/* 問題文 */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>問題文</div>
+                  <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
+                    {p.problemText}
+                  </p>
+                </div>
+
+                {/* 解き方 */}
+                {revealStep >= 1 && (
+                  <div style={{ marginBottom: 20, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
+                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解き方（ヒント）</div>
+                    <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
+                      {p.solutionHint}
+                    </p>
+                  </div>
+                )}
+
+                {/* 解法 */}
+                {revealStep >= 2 && (
+                  <div style={{ marginBottom: 20, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
+                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解法</div>
+                    <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
+                      {p.solutionMethod}
+                    </p>
+                  </div>
+                )}
+
+                {/* 解答 */}
+                {revealStep >= 3 && (
+                  <div style={{ paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
+                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解答（詳細）</div>
+                    <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
+                      {p.solutionFull}
+                    </p>
+                    <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
+                      <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>答え</div>
+                      <div style={{ color: C.green, fontSize: 16, fontWeight: 700 }}>
+                        {p.answerSummary}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 動画リンク */}
+              {p.youtubeLinks.length > 0 && (
+                <div style={{ marginBottom: 24 }}>
+                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
+                    動画解説
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {p.youtubeLinks.map((link, i) => (
+                      <a
+                        key={i}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 12,
+                          background: C.card,
+                          borderRadius: 8,
+                          padding: 12,
+                          border: `1px solid ${C.border}`,
+                          color: C.accent,
+                          textDecoration: "none",
+                          transition: "all 0.2s",
+                          cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = C.cardHover; e.currentTarget.style.borderColor = C.accent; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = C.card; e.currentTarget.style.borderColor = C.border; }}
+                      >
+                        <span style={{ fontSize: 18 }}>▶</span>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 2 }}>
+                            {link.channel} - {link.desc}
+                          </div>
+                          <div style={{ fontSize: 11, color: C.textMuted }}>
+                            {formatTime(link.startSec)}
+                          </div>
+                        </div>
+                        <span style={{ color: C.textMuted }}>→</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ナビゲーション */}
+              <div style={{ display: "flex", gap: 8, marginTop: 40 }}>
+                <button
+                  onClick={() => { const idx = PROBLEMS.findIndex((x) => x.id === p.id); if (idx > 0) setSelectedProblem(PROBLEMS[idx - 1]); }}
+                  style={{
+                    background: C.card,
+                    color: C.textMuted,
+                    border: `1px solid ${C.border}`,
+                    borderRadius: 8,
+                    padding: "10px 16px",
+                    cursor: "pointer",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    transition: "all 0.2s",
+                  }}
+                >
+                  ← 前の問題
+                </button>
+                <button
+                  onClick={() => { const idx = PROBLEMS.findIndex((x) => x.id === p.id); if (idx < PROBLEMS.length - 1) setSelectedProblem(PROBLEMS[idx + 1]); }}
+                  style={{
+                    background: C.card,
+                    color: C.textMuted,
+                    border: `1px solid ${C.border}`,
+                    borderRadius: 8,
+                    padding: "10px 16px",
+                    cursor: "pointer",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    transition: "all 0.2s",
+                    marginLeft: "auto",
+                  }}
+                >
+                  次の問題 →
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // ─── ブラインド特訓ページ ──────────────────
+      const BlindPage = () => {
+        if (!blindProblem) return null;
+
+        const uni = getUni(blindProblem.universityId);
+        const tags = blindProblem.tagIds.map(getTag).filter(Boolean);
+
+        return (
+          <div style={{ background: C.bg, minHeight: "100vh" }}>
+            <Navbar />
+
+            <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 20px" }}>
+              <button
+                onClick={() => setPage("home")}
+                style={{
+                  background: "transparent",
+                  color: C.accent,
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: 13,
+                  marginBottom: 20,
+                  fontWeight: 600,
+                }}
+              >
+                ← ホームに戻る
+              </button>
+
+              <div style={{ marginBottom: 24, borderBottom: `1px solid ${C.border}`, paddingBottom: 20 }}>
+                <div style={{ color: uni?.color, fontWeight: 700, fontSize: 14, marginBottom: 8 }}>
+                  ブラインド特訓
+                </div>
+                <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
+                  <Stars n={blindProblem.difficulty} />
+                  <span style={{ color: C.textMuted, fontSize: 12 }}>難易度 {blindProblem.difficulty}/5</span>
+                </div>
+              </div>
+
+              <div style={{ background: C.card, borderRadius: 12, padding: 24, marginBottom: 24, border: `1px solid ${C.border}` }}>
+                <p style={{ color: C.text, fontSize: 16, lineHeight: 2, whiteSpace: "pre-wrap" }}>
+                  {blindProblem.problemText}
+                </p>
+              </div>
+
+              <div style={{ display: "flex", gap: 12 }}>
+                <button
+                  onClick={() => startBlind()}
+                  style={{
+                    background: C.accent,
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "12px 20px",
+                    cursor: "pointer",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.opacity = 0.9; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.opacity = 1; }}
+                >
+                  別の問題に変える
+                </button>
+                <button
+                  onClick={() => openDetail(blindProblem)}
+                  style={{
+                    background: C.card,
+                    color: C.text,
+                    border: `1px solid ${C.border}`,
+                    borderRadius: 8,
+                    padding: "12px 20px",
+                    cursor: "pointer",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    transition: "all 0.2s",
+                  }}
+                >
+                  解答を見る
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // ─── ページレンダリング ──────────────────
+      if (page === "detail") return <DetailPage />;
+      if (page === "blind") return <BlindPage />;
+      return <HomePage />;
+    }
+
+    // ─── マウント ──────────────────────────────────────────
+    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+  </script>
+</body>
+</html>
