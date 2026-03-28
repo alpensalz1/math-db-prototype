@@ -75,9 +75,9 @@
       { id: 25, name: "図形的解釈", layer: 2, color: "#3b82f6" },
       { id: 26, name: "置換積分の見抜き", layer: 2, color: "#3b82f6" },
       { id: 27, name: "合同式", layer: 2, color: "#3b82f6" },
-      { id: 28, name: "背理法", layer: 2, color: "#3b82f6" },
+      { id: 28, name: "耂理法", layer: 2, color: "#3b82f6" },
       { id: 29, name: "漸化式の特性方程式", layer: 2, color: "#3b82f6" },
-      { id: 40, name: "初見殺し", layer: 3, color: "#f97316" },
+      { id: 40, name: "初見欲し", layer: 3, color: "#f97316" },
       { id: 41, name: "計算量ヘビー", layer: 3, color: "#f97316" },
       { id: 42, name: "誘導なし", layer: 3, color: "#f97316" },
       { id: 43, name: "典型問題", layer: 3, color: "#f97316" },
@@ -106,7 +106,7 @@
         questionNumber: 3, questionLabel: "第3問", difficulty: 4,
         problemText: "xy平面上の領域 D = \\{(x,y) \\mid x^2 + y^2 \\leq 1\\} において、f(x,y) = x^2 + 2xy + 3y^2 の最大値と最小値を求めよ。",
         solutionHint: "x = r\\cos\\theta, y = r\\sin\\theta と置換し、三角関数の合成を利用する。",
-        solutionMethod: "f(r,\\theta) = r^2(1 + \\sin 2\\theta + 2\\sin^2\\theta) = r^2(2 - \\cos 2\\theta + \\sin 2\\theta) と変形。r = 1 のとき最大・最小となるので、g(\\theta) = 2 - \\cos 2\\theta + \\sin 2\\theta の最大・最小を求める。",
+        solutionMethod: "f(r,\\theta) = r^2(1 + \\sin 2\\theta + 2\\sin^2\\theta) = r^2(2 - \\cos 2\\theta + \\sin 2\\theta) と変形。r = 1 のとき最大・最小となるので、f(\\theta) = 2 - \\cos 2\\theta + \\sin 2\\theta の最大・最小を求める。",
         solutionFull: "三角関数の合成により g(\\theta) = 2 + \\sqrt{2}\\sin(2\\theta - \\pi/4) と変形できる。\n\n最大値：\\theta = 3\\pi/8 のとき f = 2 + \\sqrt{2}\n最小値：\\theta = 7\\pi/8 のとき f = 0（原点）\n\nよって、最大値は 2 + \\sqrt{2}、最小値は 0。",
         answerSummary: "最大値 2+√2、最小値 0",
         tagIds: [2, 10, 20, 25, 41],
@@ -160,7 +160,7 @@
         answerSummary: "121/216",
         tagIds: [3, 43, 45],
         youtubeLinks: [
-          { channel: "数学太郎", desc: "阪大2025 確率", startSec: 0, url: "https://youtube.com/watch?v=example4" },
+          { channel: "数学天郎", desc: "阪大2025 確率", startSec: 0, url: "https://youtube.com/watch?v=example4" },
         ],
       },
       {
@@ -204,7 +204,7 @@
         problemText: "数列 {a_n} を a_1 = 1, a_{n+1} = a_n + \\frac{1}{a_n} (n ≥ 1) で定める。\\lim_{n→∞} \\frac{a_n}{\\sqrt{n}} を求めよ。",
         solutionHint: "a_{n+1}² = a_n² + 2 + 1/a_n² に注目し、b_n = a_n² とおいて漸近挙動を調べる。",
         solutionMethod: "b_n = a_n² とおくと b_{n+1} = b_n + 2 + 1/b_n。n が大きいとき 1/b_n → 0 なので b_n ≈ 2n。よって a_n ≈ √(2n)。",
-        solutionFull: "b_n = a_n² とおく。\nb_{n+1} = (a_n + 1/a_n)² = a_n² + 2 + 1/a_n² = b_n + 2 + 1/b_n\n\nテレスコープ和：b_n = b_1 + 2(n-1) + Σ(1/b_k)\nb_1 = 1 なので b_n = 2n - 1 + Σ(1/b_k)\n\nb_n ≥ 2n - 1 より Σ(1/b_k) ≤ Σ1/(2k-1) = O(log n)\n\nよって b_n/n → 2、すなわち a_n²/n → 2\n\n∴ lim a_n/√n = √2",
+        solutionFull: "b_n = a_n² とおく。\nb_{n+1} = (a_n + 1/a_n)² = a_n² + 2 + 1/a_n² = b_n + 2 + 1/b_n\n\nテレスコープ垊：b_n = b_1 + 2(n-1) + Σ(1/b_k)\nb_1 = 1 なので b_n = 2n - 1 + Σ(1/b_k)\n\nb_n ≥ 2n - 1 より Σ(1/b_k) ≤ Σ1/(2k-1) = O(log n)\n\nよって b_n/n → 2、すなわち a_n²/n → 2\n\n∴ lim a_n/√n = √2",
         answerSummary: "√2",
         tagIds: [6, 29, 44, 42, 40],
         youtubeLinks: [],
@@ -305,11 +305,11 @@
           onMouseEnter={(e) => { e.currentTarget.style.background = C.cardHover; e.currentTarget.style.transform = "translateY(-2px)"; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = C.card; e.currentTarget.style.transform = "translateY(0)"; }}
         >
-          {/* 大学カラーバー */}
+          
           <div style={{ height: 4, background: uni?.color || C.accent }} />
 
           <div style={{ padding: "14px 16px" }}>
-            {/* ヘッダー */}
+            
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
               <span style={{ color: uni?.color, fontWeight: 700, fontSize: 13 }}>
                 {uni?.short} {problem.year} {problem.examType}
@@ -317,25 +317,25 @@
               <span style={{ color: C.textMuted, fontSize: 12 }}>{problem.questionLabel}</span>
             </div>
 
-            {/* 問題文プレビュー */}
+            
             <p style={{ color: C.text, fontSize: 13, lineHeight: 1.6, margin: "0 0 12px 0", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
               {problem.problemText.replace(/\\\\/g, "").replace(/\\[a-z]+/g, "").replace(/[{}^_]/g, "").slice(0, 120)}...
             </p>
 
-            {/* 難易度 */}
+            
             <div style={{ marginBottom: 8 }}>
               <Stars n={problem.difficulty} />
               <span style={{ color: C.textMuted, fontSize: 11, marginLeft: 8 }}>難易度 {problem.difficulty}/5</span>
             </div>
 
-            {/* タグ */}
+            
             <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: hasVideo ? 8 : 0 }}>
               {tags.map((tag) => (
                 <TagPill key={tag.id} tag={tag} small />
               ))}
             </div>
 
-            {/* 動画バッジ */}
+            
             {hasVideo && (
               <div style={{ color: C.accent, fontSize: 12, fontWeight: 600 }}>
                 ▶ 動画解説あり（{problem.youtubeLinks.length}本）
@@ -346,7 +346,7 @@
       );
     };
 
-    // ─── メインアプル ────────────────────────────────────────
+    // ─── メインアプリ ────────────────────────────────────────
     function App() {
       const [page, setPage] = useState("home");
       const [selectedProblem, setSelectedProblem] = useState(null);
@@ -425,7 +425,7 @@
       const Navbar = () => (
         <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "0 20px", position: "sticky", top: 0, zIndex: 100 }}>
           <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", alignItems: "center", height: 56, gap: 16 }}>
-            {/* ロゴ */}
+            
             <div
               onClick={() => { setPage("home"); setSelectedTags([]); setSelectedUnis([]); setSelectedDifficulties([]); setSearchQuery(""); }}
               style={{ color: C.accent, fontWeight: 800, fontSize: 20, cursor: "pointer", whiteSpace: "nowrap", letterSpacing: -0.5 }}
@@ -433,7 +433,7 @@
               数超 DB
             </div>
 
-            {/* ナビタブ */}
+            
             <div style={{ display: "flex", gap: 4 }}>
               {[
                 { label: "ホーム", key: "home" },
@@ -460,7 +460,7 @@
             </div>
 
             <div style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center" }}>
-              {/* 検索 */}
+              
               <input
                 type="text"
                 placeholder="検索..."
@@ -480,7 +480,7 @@
                 onBlur={(e) => { e.target.style.borderColor = C.border; e.target.style.boxShadow = "none"; }}
               />
 
-              {/* フィルタボタン */}
+              
               <button
                 onClick={() => setShowFilter(!showFilter)}
                 style={{
@@ -507,11 +507,11 @@
         <div style={{ background: C.bg, minHeight: "100vh", paddingTop: 16 }}>
           <Navbar />
 
-          {/* フィルタパネル */}
+          
           {showFilter && (
             <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "20px", marginTop: 0 }}>
               <div style={{ maxWidth: 1400, margin: "0 auto" }}>
-                {/* 大学フィルタ */}
+                
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>大学</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -526,7 +526,7 @@
                   </div>
                 </div>
 
-                {/* 難易度フィルタ */}
+                
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>難易度</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -552,7 +552,7 @@
                   </div>
                 </div>
 
-                {/* タグフィルタ */}
+                
                 <div>
                   <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>タグ</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -570,9 +570,9 @@
             </div>
           )}
 
-          {/* メインコンテンツ */}
+          
           <div style={{ maxWidth: 1400, margin: "0 auto", padding: "20px" }}>
-            {/* ソート */}
+            
             <div style={{ marginBottom: 20, display: "flex", gap: 8, alignItems: "center" }}>
               <span style={{ color: C.textMuted, fontSize: 13 }}>ソート:</span>
               {[
@@ -601,12 +601,12 @@
               ))}
             </div>
 
-            {/+ 件数 */}
+            
             <div style={{ color: C.textMuted, marginBottom: 16, fontSize: 12 }}>
               {filtered.length} 件の問題
             </div>
 
-            {/* カードグリッド - FIXED minmax(280px, 1fr) */}
+            
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, paddingBottom: 40 }}>
               {filtered.map((p) => (
                 <ProblemCard key={p.id} problem={p} onClick={() => openDetail(p)} />
@@ -630,7 +630,7 @@
             <Navbar />
 
             <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 20px" }}>
-              {/* ヘッダー */}
+              
               <button
                 onClick={() => setPage("home")}
                 style={{
@@ -646,7 +646,7 @@
                 ← ホームに戻る
               </button>
 
-              {/* タイトル */}
+              
               <div style={{ marginBottom: 24, borderBottom: `1px solid ${C.border}`, paddingBottom: 20 }}>
                 <div style={{ color: uni?.color, fontWeight: 700, fontSize: 14, marginBottom: 8 }}>
                   {uni?.name} {p.year} {p.examType} / {p.examCategory}
@@ -665,7 +665,7 @@
                 </div>
               </div>
 
-              {/* 進捗インジケータ */}
+              
               <div style={{ marginBottom: 24 }}>
                 <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
                   {["問題のみ", "解き方", "解法", "解答"].map((label, i) => (
@@ -688,9 +688,9 @@
                 </div>
               </div>
 
-              {/* コンテンツ */}
+              
               <div style={{ background: C.card, borderRadius: 12, padding: 20, marginBottom: 24, border: `1px solid ${C.border}` }}>
-                {/* 問題文 */}
+                
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>問題文</div>
                   <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
@@ -698,7 +698,7 @@
                   </p>
                 </div>
 
-                {/* 解き方 */}
+                
                 {revealStep >= 1 && (
                   <div style={{ marginBottom: 20, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
                     <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解き方（ヒント）</div>
@@ -708,7 +708,7 @@
                   </div>
                 )}
 
-                {/* 解法 */}
+                
                 {revealStep >= 2 && (
                   <div style={{ marginBottom: 20, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
                     <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解法</div>
@@ -718,7 +718,7 @@
                   </div>
                 )}
 
-                {/* 解答 */}
+                
                 {revealStep >= 3 && (
                   <div style={{ paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
                     <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解答（詳細）</div>
@@ -735,7 +735,7 @@
                 )}
               </div>
 
-              {/* 動画リンク */}
+              
               {p.youtubeLinks.length > 0 && (
                 <div style={{ marginBottom: 24 }}>
                   <div style={{ color: C.text, fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
@@ -780,7 +780,7 @@
                 </div>
               )}
 
-              {/* ナビゲーション */}
+              
               <div style={{ display: "flex", gap: 8, marginTop: 40 }}>
                 <button
                   onClick={() => { const idx = PROBLEMS.findIndex((x) => x.id === p.id); if (idx > 0) setSelectedProblem(PROBLEMS[idx - 1]); }}
