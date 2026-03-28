@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>数超DB - 大学入試数学データベース</title>
+  <title>æ°è¶DB - å¤§å­¦å¥è©¦æ°å­¦ãã¼ã¿ãã¼ã¹</title>
   <style>
     * {
       margin: 0;
@@ -95,316 +95,326 @@
   <script type="text/babel">
     const { useState, useMemo } = React;
 
-    // ─── データ ────────────────────────────────────────────
+    // âââ ãã¼ã¿ âââââââââââââââââââââââââââââââââââââââââââââ
     const TAGS = [
-      { id: 1, name: "微分法(数III)", layer: 1, color: "#6366f1" },
-      { id: 2, name: "積分法(数III)", layer: 1, color: "#6366f1" },
-      { id: 3, name: "確率", layer: 1, color: "#6366f1" },
-      { id: 8, name: "整数の性質", layer: 1, color: "#6366f1" },
-      { id: 5, name: "ベクトル", layer: 1, color: "#6366f1" },
-      { id: 6, name: "数列", layer: 1, color: "#6366f1" },
-      { id: 7, name: "複素数平面", layer: 1, color: "#6366f1" },
-      { id: 8, name: "図形と方程式", layer: 1, color: "#6366f1" },
-      { id: 9, name: "三角関数", layer: 1, color: "#6366f1" },
-      { id: 10, name: e: "二次曲線", layer: 1, color: "#6366f1" },
-      { id: 11, name: "場合の数", layer: 1, color: "#6366f1" },
-      { id: 12, name: "極限", layer: 1, color: "#6366f1" },
-      { id: 13, name: "平面幾何", layer: 1, color: "#6366f1" },
-      { id: 14, name: "微分法(数II)", layer: 1, color: "#6366f1" },
-      { id: 15, name: "積分法(数II)", layer: 1, color: "#6366f1" },
-      { id: 16, name: "不等式", layer: 1, color: "#6366f1" },
-      { id: 20, name: "パラメータ表示", layer: 2, color: "#3b82f6" },
-      { id: 21, name: "対称性の利用", layer: 2, color: "#3b82f6" },
-      { id: 22, name: "パラメータ分離", layer: 2, color: "#3b82f6" },
-      { id: 23, name: "数学的帰納法", layer: 2, color: "#3b82f6" },
-      { id: 24, name: "同値変彄�^Y\�����܎���؎����K��Y��K�[YN��f��oh��:)��a��^Y\�����܎���؎����K��Y����[YN���k�����cyb!��^Y\�����܎���؎����K��Y����[YN��d"9d#9o#ȋ^Y\�����܎���؎����K��Y���[YN�� �9�!���H�^Y\�����܎���؎����K��Y��K�[YN���.9c%�o#ȋ^Y\�����܎���؎����K��Y���[YN��`!�`����H�^Y\�����܎���؎����K��Y��K�[YN��h-9d"9b!��dH�^Y\�����܎���؎����K��Y�̋�[YN���k��ex�o��a��hx�k�c���!��^Y\�����܎���؎����K��Y����[YN����y�������y�戋^Y\�����܎���؎����K��Y���[YN��gh��cz*"9�ȋ^Y\�����܎���آ82f6" },
-      { id: 35, name: "曲線の長さ", layer: 2, color: "#3b82f6" },
-      { id: 36, name: "写像の反復", layer: 2, color: "#3b82f6" },
-      { id: 40, name: "初見殺し", layer: 3, color: "#f97316" },
-      { id: 41, name: "計算量ヘビー", layer: 3, color: "#f97316" },
-      { id: 42, name: "誘導なし", layer: 3, color: "#f97316" },
-      { id: 43, name: "典型問題", layer: 3, color: "#f97316" },
-      { id: 44, name: "思考力重視", layer: 3, color: "#f97316" },
-      { id: 45, name: "場合分け地獄", layer: 3, color: "#f97316" },
-      { id: 46, name: "発想一発", layer: 3, color: "#f97316" },
-      { id: 47, name: "複合分野", layer: 3, color: "#f97316" },
-      { id: 48, name: "証明問題", layer: 3, color: "#f97316" },
-      { id: 49, name: "時間泥棒", layer: 3, color: "#f97316" },
+      { id: 1, name: "å¾®åæ³(æ°III)", layer: 1, color: "#6366f1" },
+      { id: 2, name: "ç©åæ³(æ°III)", layer: 1, color: "#6366f1" },
+      { id: 3, name: "ç¢ºç", layer: 1, color: "#6366f1" },
+      { id: 4, name: "æ´æ°ã®æ§è³ª", layer: 1, color: "#6366f1" },
+      { id: 5, name: "ãã¯ãã«", layer: 1, color: "#6366f1" },
+      { id: 6, name: "æ°å", layer: 1, color: "#6366f1" },
+      { id: 7, name: "è¤ç´ æ°å¹³é¢", layer: 1, color: "#6366f1" },
+      { id: 8, name: "å³å½¢ã¨æ¹ç¨å¼", layer: 1, color: "#6366f1" },
+      { id: 9, name: "ä¸è§é¢æ°", layer: 1, color: "#6366f1" },
+      { id: 10, name: "äºæ¬¡æ²ç·", layer: 1, color: "#6366f1" },
+      { id: 11, name: "å ´åã®æ°", layer: 1, color: "#6366f1" },
+      { id: 12, name: "æ¥µé", layer: 1, color: "#6366f1" },
+      { id: 13, name: "å¹³é¢å¹¾ä½", layer: 1, color: "#6366f1" },
+      { id: 14, name: "å¾®åæ³(æ°II)", layer: 1, color: "#6366f1" },
+      { id: 15, name: "ç©åæ³(æ°II)", layer: 1, color: "#6366f1" },
+      { id: 16, name: "ä¸ç­å¼", layer: 1, color: "#6366f1" },
+      { id: 20, name: "ãã©ã¡ã¼ã¿è¡¨ç¤º", layer: 2, color: "#3b82f6" },
+      { id: 21, name: "å¯¾ç§°æ§ã®å©ç¨", layer: 2, color: "#3b82f6" },
+      { id: 22, name: "ãã©ã¡ã¼ã¿åé¢", layer: 2, color: "#3b82f6" },
+      { id: 23, name: "æ°å­¦çå¸°ç´æ³", layer: 2, color: "#3b82f6" },
+      { id: 24, name: "åå¤å¤å½¢", layer: 2, color: "#3b82f6" },
+      { id: 25, name: "å³å½¢çè§£é", layer: 2, color: "#3b82f6" },
+      { id: 26, name: "ç½®æç©å", layer: 2, color: "#3b82f6" },
+      { id: 27, name: "ååå¼", layer: 2, color: "#3b82f6" },
+      { id: 28, name: "èçæ³", layer: 2, color: "#3b82f6" },
+      { id: 29, name: "æ¼¸åå¼", layer: 2, color: "#3b82f6" },
+      { id: 30, name: "éåæ³", layer: 2, color: "#3b82f6" },
+      { id: 31, name: "å ´ååã", layer: 2, color: "#3b82f6" },
+      { id: 32, name: "ã¯ãã¿ãã¡ã®åç", layer: 2, color: "#3b82f6" },
+      { id: 33, name: "æ¥ç·ã»æ³ç·", layer: 2, color: "#3b82f6" },
+      { id: 34, name: "é¢ç©è¨ç®", layer: 2, color: "#3b82f6" },
+      { id: 35, name: "æ²ç·ã®é·ã", layer: 2, color: "#3b82f6" },
+      { id: 36, name: "ååã®åå¾©", layer: 2, color: "#3b82f6" },
+      { id: 40, name: "åè¦æ®ºã", layer: 3, color: "#f97316" },
+      { id: 41, name: "è¨ç®éããã¼", layer: 3, color: "#f97316" },
+      { id: 42, name: "èªå°ãªã", layer: 3, color: "#f97316" },
+      { id: 43, name: "å¸ååé¡", layer: 3, color: "#f97316" },
+      { id: 44, name: "æèåéè¦", layer: 3, color: "#f97316" },
+      { id: 45, name: "å ´ååãå°ç", layer: 3, color: "#f97316" },
+      { id: 46, name: "çºæ³ä¸çº", layer: 3, color: "#f97316" },
+      { id: 47, name: "è¤ååé", layer: 3, color: "#f97316" },
+      { id: 48, name: "è¨¼æåé¡", layer: 3, color: "#f97316" },
+      { id: 49, name: "æéæ³¥æ£", layer: 3, color: "#f97316" },
     ];
 
     const UNIVERSITIES = [
-      { id: 1, name: "東京大学", short: "東大", color: "#dc2626" },
-      { id: 2, name: "京都大学", short: "京大", color: "#2563eb" },
-      { id: 3, name: "大阪大学", short: "阪大", color: "#7c3aed" },
-      { id: 4, name: "東北大学", short: "東北大", color: "#059669" },
-      { id: 5, name: "北海道大学", short: "北大", color: "#0891b2" },
-      { id: 6, name: "一橋大学", short: "一橋", color: "#d97706" },
-      { id: 7, name: "東京科学大学", short: "東科大", color: "#4f46e5" },
-      { id: 8, name: "九州大学", short: "九大", color: "#be185d" },
-      { id: 9, name: "名古屋大学", short: "名大", color: "#ea580c" },
+      { id: 1, name: "æ±äº¬å¤§å­¦", short: "æ±å¤§", color: "#dc2626" },
+      { id: 2, name: "äº¬é½å¤§å­¦", short: "äº¬å¤§", color: "#2563eb" },
+      { id: 3, name: "å¤§éªå¤§å­¦", short: "éªå¤§", color: "#7c3aed" },
+      { id: 4, name: "æ±åå¤§å­¦", short: "æ±åå¤§", color: "#059669" },
+      { id: 5, name: "åæµ·éå¤§å­¦", short: "åå¤§", color: "#0891b2" },
+      { id: 6, name: "ä¸æ©å¤§å­¦", short: "ä¸æ©", color: "#d97706" },
+      { id: 7, name: "æ±äº¬ç§å­¦å¤§å­¦", short: "æ±ç§å¤§", color: "#4f46e5" },
+      { id: 8, name: "ä¹å·å¤§å­¦", short: "ä¹å¤§", color: "#be185d" },
+      { id: 9, name: "åå¤å±å¤§å­¦", short: "åå¤§", color: "#ea580c" },
     ];
 
     const PROBLEMS = [
       {
-        id: 1, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 1, questionLabel: "第1問", difficulty: 4,
-        problemText: "座標平面上の点 A(0,0), B(0,1), C(1,1), D(1,0) を考える。実数 0 < t < 1 に対して、線分 AB, BC, CD を t:(1-t) に内分する点をそれぞれ Pt, Qt, Rt とし、線分 PtQt, QtRt を t:(1-t) に内分する点をそれぞれ St, Tt とする。さらに、線分 StTt を t:(1-t) に内分する点を Ut とする。また、点 A を U0、点 D を U1 とする。(1) 点 Ut の座標を求めよ。(2) t が 0 <= t <= 1 の範囲を動くときに点 Ut が描く曲線と、線分 AD で囲まれた部分の面積を求めよ。(3) a を 0 < a < 1 を満たす実数とする。t0が 0 <= t <= a の範囲を動くときに点 Ut が描く曲線の長さを、a の多項式の形で求めよ。",
+        id: 1, universityId: 1, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 1, questionLabel: "ç¬¬1å", difficulty: 4,
+        problemText: "åº§æ¨å¹³é¢ä¸ã®ç¹ A(0,0), B(0,1), C(1,1), D(1,0) ãèãããå®æ° 0 < t < 1 ã«å¯¾ãã¦ãç·å AB, BC, CD ã t:(1-t) ã«ååããç¹ããããã Pt, Qt, Rt ã¨ããç·å PtQt, QtRt ã t:(1-t) ã«ååããç¹ããããã St, Tt ã¨ãããããã«ãç·å StTt ã t:(1-t) ã«ååããç¹ã Ut ã¨ãããã¾ããç¹ A ã U0ãç¹ D ã U1 ã¨ããã(1) ç¹ Ut ã®åº§æ¨ãæ±ããã(2) t ã 0 <= t <= 1 ã®ç¯å²ãåãã¨ãã«ç¹ Ut ãæãæ²ç·ã¨ãç·å AD ã§å²ã¾ããé¨åã®é¢ç©ãæ±ããã(3) a ã 0 < a < 1 ãæºããå®æ°ã¨ãããt ã 0 <= t <= a ã®ç¯å²ãåãã¨ãã«ç¹ Ut ãæãæ²ç·ã®é·ãããa ã®å¤é å¼ã®å½¢ã§æ±ããã",
         tagIds: [8, 2, 20, 34, 35, 41],
         youtubeLinks: ["https://www.youtube.com/watch?v=3-v-3vhCToA","https://www.youtube.com/watch?v=gf7WHl2dgGI","https://www.youtube.com/watch?v=beKUe8420-A"],
-        sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.atml",
+        sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 2, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 2, questionLabel: "第2問", difficulty: 3,
-        problemText: "(1) x > 0 のとき、log x <= x - 1 を示せ。(2) 次の極限を求めよ。lim(n->inf) n * integral(1,2) log(1 + x^(1/n^2)) dx",
+        id: 2, universityId: 1, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 2, questionLabel: "ç¬¬2å", difficulty: 3,
+        problemText: "(1) x > 0 ã®ã¨ããlog x <= x - 1 ãç¤ºãã(2) æ¬¡ã®æ¥µéãæ±ãããlim(n->inf) n * integral(1,2) log(1 + x^(1/n^2)) dx",
         tagIds: [12, 16, 32, 48, 44],
         youtubeLinks: ["https://www.youtube.com/watch?v=3-v-3vhCToA","https://www.youtube.com/watch?v=gf7WHl2dgGI","https://www.youtube.com/watch?v=beKUe8420-A"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 3, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 3, questionLabel: "第3問", difficulty: 3,
-        problemText: "平行四辺形 ABCD において、角ABC = pi/6、AB = a、BC = b、a <= b とする。次の条件を満たす長方形 EFGH を考え、その面積を S とする。条件：点 A, B, C, D はそれぞれ辺 EF, FG, GH, HE 上にある。(1) 角BCG = theta とするとき、S を a, b, theta を用いて表せ。(2) S のとりうる値の最大値を a, b を用いて表せ。",
+        id: 3, universityId: 1, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 3, questionLabel: "ç¬¬3å", difficulty: 3,
+        problemText: "å¹³è¡åè¾ºå½¢ ABCD ã«ããã¦ãè§ABC = pi/6ãAB = aãBC = bãa <= b ã¨ãããæ¬¡ã®æ¡ä»¶ãæºããé·æ¹å½¢ EFGH ãèãããã®é¢ç©ã S ã¨ãããæ¡ä»¶ï¼ç¹ A, B, C, D ã¯ããããè¾º EF, FG, GH, HE ä¸ã«ããã(1) è§BCG = theta ã¨ããã¨ããS ã a, b, theta ãç¨ãã¦è¡¨ãã(2) S ã®ã¨ãããå¤ã®æå¤§å¤ã a, b ãç¨ãã¦è¡¨ãã",
         tagIds: [13, 9, 22, 47],
         youtubeLinks: ["https://www.youtube.com/watch?v=3-v-3vhCToA","https://www.youtube.com/watch?v=gf7WHl2dgGI","https://www.youtube.com/watch?v=beKUe8420-A"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 4, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 4, questionLabel: "第4問", difficulty: 5,
-        problemText: "この問いでは、0以上の整数の2乗になる数を平方数と呼ぶ。a を正の整数とし、f_a(x) = x^2 + x - a とおく。(1) n を正の整数とする。f_a(n) が平方数ならば、n <= a であることを示せ。(2) f_a(n) が平方数となる正の整数 n の個数を Na とおく。次の条件(i),(ii)が同値であることを示せ。(i) Na = 1 である。(ii) 4a + 1 は素数である。",
+        id: 4, universityId: 1, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 4, questionLabel: "ç¬¬4å", difficulty: 5,
+        problemText: "ãã®åãã§ã¯ã0ä»¥ä¸ã®æ´æ°ã®2ä¹ã«ãªãæ°ãå¹³æ¹æ°ã¨å¼ã¶ãa ãæ­£ã®æ´æ°ã¨ããf_a(x) = x^2 + x - a ã¨ããã(1) n ãæ­£ã®æ´æ°ã¨ãããf_a(n) ãå¹³æ¹æ°ãªãã°ãn <= a ã§ãããã¨ãç¤ºãã(2) f_a(n) ãå¹³æ¹æ°ã¨ãªãæ­£ã®æ´æ° n ã®åæ°ã Na ã¨ãããæ¬¡ã®æ¡ä»¶(i),(ii)ãåå¤ã§ãããã¨ãç¤ºãã(i) Na = 1 ã§ããã(ii) 4a + 1 ã¯ç´ æ°ã§ããã",
         tagIds: [4, 28, 48, 44, 40],
         youtubeLinks: ["https://www.youtube.com/watch?v=3-v-3vhCToA","https://www.youtube.com/watch?v=gf7WHl2dgGI","https://www.youtube.com/watch?v=beKUe8420-A"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 5, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 5, questionLabel: "第5問", difficulty: 5,
-        problemText: "n を2以上の整数とする。1からnまでの数字が書かれた札が各1枚ずつ合計n枚あり、横一列におかれている。1以上(n-1)以下の整数 i に対して、次の操作(Ti)を考える。(Ti) 左からi番目の札の数字が左から(i+1)番目の札の数字よりも大きければ、これら2枚の札の位置を入れかえる。最初の状態において札の数字は左から A1, A2, ..., An であったとする。この状態から(n-1)回の操作 T1, T2, ..., T(n-1) を順に行った後、続けて(n-1)回の操作 T(n-1), ..., T2, T1 を順に行ったところ、札の数字は左から 1, 2, ..., n と小さい順に並んだ。(1) A1 と A2 のうち少なくとも一方は2以下であることを示せ。(2) 最初の状態としてありうる札の数字の並び方の総数を cn とする。n が4以上のとき、cn を c(n-1) と c(n-2) を用いて表せ。",
+        id: 5, universityId: 1, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 5, questionLabel: "ç¬¬5å", difficulty: 5,
+        problemText: "n ã2ä»¥ä¸ã®æ´æ°ã¨ããã1ããnã¾ã§ã®æ°å­ãæ¸ãããæ­ãå1æãã¤åè¨næãããæ¨ªä¸åã«ãããã¦ããã1ä»¥ä¸(n-1)ä»¥ä¸ã®æ´æ° i ã«å¯¾ãã¦ãæ¬¡ã®æä½(Ti)ãèããã(Ti) å·¦ããiçªç®ã®æ­ã®æ°å­ãå·¦ãã(i+1)çªç®ã®æ­ã®æ°å­ãããå¤§ãããã°ãããã2æã®æ­ã®ä½ç½®ãå¥ãããããæåã®ç¶æã«ããã¦æ­ã®æ°å­ã¯å·¦ãã A1, A2, ..., An ã§ãã£ãã¨ããããã®ç¶æãã(n-1)åã®æä½ T1, T2, ..., T(n-1) ãé ã«è¡ã£ãå¾ãç¶ãã¦(n-1)åã®æä½ T(n-1), ..., T2, T1 ãé ã«è¡ã£ãã¨ãããæ­ã®æ°å­ã¯å·¦ãã 1, 2, ..., n ã¨å°ããé ã«ä¸¦ãã ã(1) A1 ã¨ A2 ã®ãã¡å°ãªãã¨ãä¸æ¹ã¯2ä»¥ä¸ã§ãããã¨ãç¤ºãã(2) æåã®ç¶æã¨ãã¦ããããæ­ã®æ°å­ã®ä¸¦ã³æ¹ã®ç·æ°ã cn ã¨ãããn ã4ä»¥ä¸ã®ã¨ããcn ã c(n-1) ã¨ c(n-2) ãç¨ãã¦è¡¨ãã",
         tagIds: [11, 29, 48, 40, 44],
         youtubeLinks: ["https://www.youtube.com/watch?v=3-v-3vhCToA","https://www.youtube.com/watch?v=gf7WHl2dgGI","https://www.youtube.com/watch?v=beKUe8420-A"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 6, universityId: 1, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 6, questionLabel: "第6問", difficulty: 5,
-        problemText: "複素数平面上の点 1/2 を中心とする半径 1/2 の円の周から原点を除いた曲線を C とする。(1) 曲線 C 上の複素数 z に対し、1/z の実部は1であることを示せ。(2) alpha, beta を曲線 C 上の相異なる複素数とするとき、1/alpha^2 + 1/beta^2 がとりうる範囲を複素数平面上に図示せよ。(3) gamma を(2)で求めた範囲に属さない複素数とするとき、1/gamma の実部がとりうる値の最大値と最小値を求めよ。",
+        id: 6, universityId: 1, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 6, questionLabel: "ç¬¬6å", difficulty: 5,
+        problemText: "è¤ç´ æ°å¹³é¢ä¸ã®ç¹ 1/2 ãä¸­å¿ã¨ããåå¾ 1/2 ã®åã®å¨ããåç¹ãé¤ããæ²ç·ã C ã¨ããã(1) æ²ç· C ä¸ã®è¤ç´ æ° z ã«å¯¾ãã1/z ã®å®é¨ã¯1ã§ãããã¨ãç¤ºãã(2) alpha, beta ãæ²ç· C ä¸ã®ç¸ç°ãªãè¤ç´ æ°ã¨ããã¨ãã1/alpha^2 + 1/beta^2 ãã¨ãããç¯å²ãè¤ç´ æ°å¹³é¢ä¸ã«å³ç¤ºããã(3) gamma ã(2)ã§æ±ããç¯å²ã«å±ããªãè¤ç´ æ°ã¨ããã¨ãã1/gamma ã®å®é¨ãã¨ãããå¤ã®æå¤§å¤ã¨æå°å¤ãæ±ããã",
         tagIds: [7, 25, 48, 40, 49],
         youtubeLinks: ["https://www.youtube.com/watch?v=3-v-3vhCToA","https://www.youtube.com/watch?v=gf7WHl2dgGI","https://www.youtube.com/watch?v=beKUe8420-A"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 7, universityId: 1, year: 2025, examType: "前期", examCategory: "文系",
-        questionNumber: 1, questionLabel: "第1問", difficulty: 3,
-        problemText: "Z を正の実数とする。座標平面において、放物線 C: y = x^2 上の点 P(a, a^2) における C の接線と直交し、P を通る直線を l とおく。l と C の交点のうち、P と異なる点を Q とおく。(1) Q の x 座標を求めよ。Q における C の接線と直交し、Q を通る直線を m とおく。m と C の交点のうち、Q と異なる点を R とおく。(2) a がすべての正の実数を動くとき、R の x 座標の最小値を求めよ。",
+        id: 7, universityId: 1, year: 2025, examType: "åæ", examCategory: "æç³»",
+        questionNumber: 1, questionLabel: "ç¬¬1å", difficulty: 3,
+        problemText: "a ãæ­£ã®å®æ°ã¨ãããåº§æ¨å¹³é¢ã«ããã¦ãæ¾ç©ç· C: y = x^2 ä¸ã®ç¹ P(a, a^2) ã«ããã C ã®æ¥ç·ã¨ç´äº¤ããP ãéãç´ç·ã l ã¨ãããl ã¨ C ã®äº¤ç¹ã®ãã¡ãP ã¨ç°ãªãç¹ã Q ã¨ããã(1) Q ã® x åº§æ¨ãæ±ãããQ ã«ããã C ã®æ¥ç·ã¨ç´äº¤ããQ ãéãç´ç·ã m ã¨ãããm ã¨ C ã®äº¤ç¹ã®ãã¡ãQ ã¨ç°ãªãç¹ã R ã¨ããã(2) a ããã¹ã¦ã®æ­£ã®å®æ°ãåãã¨ããR ã® x åº§æ¨ã®æå°å¤ãæ±ããã",
         tagIds: [10, 14, 33, 36, 47],
         youtubeLinks: ["https://www.youtube.com/watch?v=z51XVN9zZ0g","https://www.youtube.com/watch?v=lOFC-IWzcwY","https://www.youtube.com/watch?v=7VG4XkYgLxI"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 8, universityId: 1, year: 2025, examType: "前期", examCategory: "文系",
-        questionNumber: 2, questionLabel: "第2問", difficulty: 4,
-        problemText: "平面上で AB = AC = 1 である二等辺三角形 ABC を考える。正の実数 r に対し、A, B, C それぞれを中心とする半径 r の円3つを合わせた領域を Dr とする。辺 AB, AC, BC がすべて Dr に含まれるような最小の r を s、三角形 ABC が Dr に含まれるような最小の r を t と表す。(1) 角BAC = pi/3 のとき、s と t を求めよ。(2) 角BAC = 2pi/3 のとき、s と t を求めよ。(3) 0 < theta < pi を満たす theta に対して、角BAC = theta のとき、s と t を theta を用いて表せ。",
+        id: 8, universityId: 1, year: 2025, examType: "åæ", examCategory: "æç³»",
+        questionNumber: 2, questionLabel: "ç¬¬2å", difficulty: 4,
+        problemText: "å¹³é¢ä¸ã§ AB = AC = 1 ã§ããäºç­è¾ºä¸è§å½¢ ABC ãèãããæ­£ã®å®æ° r ã«å¯¾ããA, B, C ãããããä¸­å¿ã¨ããåå¾ r ã®å3ã¤ãåãããé åã Dr ã¨ãããè¾º AB, AC, BC ããã¹ã¦ Dr ã«å«ã¾ãããããªæå°ã® r ã sãä¸è§å½¢ ABC ã Dr ã«å«ã¾ãããããªæå°ã® r ã t ã¨è¡¨ãã(1) è§BAC = pi/3 ã®ã¨ããs ã¨ t ãæ±ããã(2) è§BAC = 2pi/3 ã®ã¨ããs ã¨ t ãæ±ããã(3) 0 < theta < pi ãæºãã theta ã«å¯¾ãã¦ãè§BAC = theta ã®ã¨ããs ã¨ t ã theta ãç¨ãã¦è¡¨ãã",
         tagIds: [13, 9, 31, 45, 47],
         youtubeLinks: ["https://www.youtube.com/watch?v=z51XVN9zZ0g","https://www.youtube.com/watch?v=lOFC-IWzcwY","https://www.youtube.com/watch?v=7VG4XkYgLxI"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 9, universityId: 1, year: 2025, examType: "前期", examCategory: "文系",
-        questionNumber: 3, questionLabel: "第3問", difficulty: 4,
-        problemText: "白玉2個が横に並んでいる。コインを投げ、表がでたら白玉、裏がでたら黒玉を一番右の玉の右隣におく。新しくおいた玉の色がその1つ左の玉の色と異なり、かつ2つ左の玉の色と一致するときには、新しくおいた玉の1つ左の玉を新しくおいた玉と同じ色の玉にとりかえる。正の整数 n に対して、手順を n 回行った時点での (n+2) 個の玉の並び方を考える。(1) n = 3 のとき、右から2番目の玉が白玉である確率を求めよ。(2) n を正の整数とする。右から2番目の玉が白玉である確率を求めよ。(3) 右から1番目と2番目の玉がともに白玉である確率を求めよ。",
+        id: 9, universityId: 1, year: 2025, examType: "åæ", examCategory: "æç³»",
+        questionNumber: 3, questionLabel: "ç¬¬3å", difficulty: 4,
+        problemText: "ç½ç2åãæ¨ªã«ä¸¦ãã§ãããã³ã¤ã³ãæããè¡¨ãã§ããç½çãè£ãã§ããé»çãä¸çªå³ã®çã®å³é£ã«ãããæ°ãããããçã®è²ããã®1ã¤å·¦ã®çã®è²ã¨ç°ãªãããã¤2ã¤å·¦ã®çã®è²ã¨ä¸è´ããã¨ãã«ã¯ãæ°ãããããçã®1ã¤å·¦ã®çãæ°ãããããçã¨åãè²ã®çã«ã¨ãããããæ­£ã®æ´æ° n ã«å¯¾ãã¦ãæé ã n åè¡ã£ãæç¹ã§ã® (n+2) åã®çã®ä¸¦ã³æ¹ãèããã(1) n = 3 ã®ã¨ããå³ãã2çªç®ã®çãç½çã§ããç¢ºçãæ±ããã(2) n ãæ­£ã®æ´æ°ã¨ãããå³ãã2çªç®ã®çãç½çã§ããç¢ºçãæ±ããã(3) å³ãã1çªç®ã¨2çªç®ã®çãã¨ãã«ç½çã§ããç¢ºçãæ±ããã",
         tagIds: [3, 29, 44, 49],
         youtubeLinks: ["https://www.youtube.com/watch?v=z51XVN9zZ0g","https://www.youtube.com/watch?v=lOFC-IWzcwY","https://www.youtube.com/watch?v=7VG4XkYgLxI"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
       {
-        id: 10, universityId: 1, year: 2025, examType: "前期", examCategory: "文系",
-        questionNumber: 4, questionLabel: "第4問", difficulty: 3,
-        problemText: "a を実数とする。座標平面において、次の連立不等式の表す領域の面積を S(a) とする。{ y <= -x^2/2 + 2, y >= |x^2 + a|, -1 <= x <= 1 } a が -2 <= a < 2 の範囲を動くとき、S(a) の最大値を求めよ。",
+        id: 10, universityId: 1, year: 2025, examType: "åæ", examCategory: "æç³»",
+        questionNumber: 4, questionLabel: "ç¬¬4å", difficulty: 3,
+        problemText: "a ãå®æ°ã¨ãããåº§æ¨å¹³é¢ã«ããã¦ãæ¬¡ã®é£ç«ä¸ç­å¼ã®è¡¨ãé åã®é¢ç©ã S(a) ã¨ããã{ y <= -x^2/2 + 2, y >= |x^2 + a|, -1 <= x <= 1 } a ã -2 <= a < 2 ã®ç¯å²ãåãã¨ããS(a) ã®æå¤§å¤ãæ±ããã",
         tagIds: [15, 8, 31, 34, 45],
         youtubeLinks: ["https://www.youtube.com/watch?v=z51XVN9zZ0g","https://www.youtube.com/watch?v=lOFC-IWzcwY","https://www.youtube.com/watch?v=7VG4XkYgLxI"],
         sourceUrl: "https://mathexamtest.jp/2025/202510261/2025102610100mj.html",
       },
 
-      // ─── 京都大学 2025 ─────────────────────────────────
+      // âââ äº¬é½å¤§å­¦ 2025 âââââââââââââââââââââââââââââââââ
       {
-        id: 11, universityId: 2, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 1, questionLabel: "第1問", difficulty: 3,
-        problemText: "次の各問に答えよ。(1) i は虚数単位とする。複素数 z が絶対値が 2 である複素数全体を動くとき、|z - i/z| の最大値と最小値を求めよ。(2) 次の定積分の値を求めよ。(i) ∫₀^√3 (x√(x²+1) + 2x³ + 1)/(x²+1) dx  (ii) ∫₀^(π/2) √((1-cosx)/(1+cosx)) dx",
+        id: 11, universityId: 2, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 1, questionLabel: "ç¬¬1å", difficulty: 3,
+        problemText: "æ¬¡ã®ååã«ç­ããã(1) i ã¯èæ°åä½ã¨ãããè¤ç´ æ° z ãçµ¶å¯¾å¤ã 2 ã§ããè¤ç´ æ°å¨ä½ãåãã¨ãã|z - i/z| ã®æå¤§å¤ã¨æå°å¤ãæ±ããã(2) æ¬¡ã®å®ç©åã®å¤ãæ±ããã(i) â«â^â3 (xâ(xÂ²+1) + 2xÂ³ + 1)/(xÂ²+1) dx  (ii) â«â^(Ï/2) â((1-cosx)/(1+cosx)) dx",
         tagIds: [7, 2, 15, 9, 43],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Kdai/Kdai_ri_2025.pdf",
       },
       {
-        id: 12, universityId: 2, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 2, questionLabel: "第2問", difficulty: 4,
-        problemText: "正の整数 x, y, z を用いて N = 9z² = x⁶ + y⁴ と表される正の整数 N の最小値を求めよ。",
+        id: 12, universityId: 2, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 2, questionLabel: "ç¬¬2å", difficulty: 4,
+        problemText: "æ­£ã®æ´æ° x, y, z ãç¨ãã¦ N = 9zÂ² = xâ¶ + yâ´ ã¨è¡¨ãããæ­£ã®æ´æ° N ã®æå°å¤ãæ±ããã",
         tagIds: [4, 28, 40, 44],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Kdai/Kdai_ri_2025.pdf",
       },
       {
-        id: 13, universityId: 2, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 4, questionLabel: "第4問", difficulty: 4,
-        problemText: "座標空間の4点 O, A, B, C は同一平面上にないとする。s, t, u は 0 でない実数とする。直線 OA 上の点 L, 直線 OB 上の点 M, 直線 OC 上の点 N を OL→ = s·OA→, OM→ = t·OB→, ON→ = u·OC→ が成り立つようにとる。(1) s, t, u が 1/s + 2/t + 3/u = 4 を満たす範囲でありゆる値をとるとき、3点 L, M, N の定める平面 LMN は s, t, u の値に無関係な一定の点 P を通ることを示せ。さらに、そのような点 P はただ一つ定まることを示せ。(2) 四面体 OABC の体積を V とする。(1) における点 P について、四面体 PABC の体積を V を用いて表せ。",
+        id: 13, universityId: 2, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 4, questionLabel: "ç¬¬4å", difficulty: 4,
+        problemText: "åº§æ¨ç©ºéã®4ç¹ O, A, B, C ã¯åä¸å¹³é¢ä¸ã«ãªãã¨ãããs, t, u ã¯ 0 ã§ãªãå®æ°ã¨ãããç´ç· OA ä¸ã®ç¹ L, ç´ç· OB ä¸ã®ç¹ M, ç´ç· OC ä¸ã®ç¹ N ã OLâ = sÂ·OAâ, OMâ = tÂ·OBâ, ONâ = uÂ·OCâ ãæãç«ã¤ããã«ã¨ãã(1) s, t, u ã 1/s + 2/t + 3/u = 4 ãæºããç¯å²ã§ããããå¤ãã¨ãã¨ãã3ç¹ L, M, N ã®å®ããå¹³é¢ LMN ã¯ s, t, u ã®å¤ã«ç¡é¢ä¿ãªä¸å®ã®ç¹ P ãéããã¨ãç¤ºããããã«ããã®ãããªç¹ P ã¯ãã ä¸ã¤å®ã¾ããã¨ãç¤ºãã(2) åé¢ä½ OABC ã®ä½ç©ã V ã¨ããã(1) ã«ãããç¹ P ã«ã¤ãã¦ãåé¢ä½ PABC ã®ä½ç©ã V ãç¨ãã¦è¡¨ãã",
         tagIds: [5, 48, 25, 44],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Kdai/Kdai_ri_2025.pdf",
       },
       {
-        id: 14, universityId: 2, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 5, questionLabel: "第5問", difficulty: 4,
-        problemText: "θ は実数とする。xyz 空間の2点 A(0, 0, √2/4), P(cosθ, sinθ, 1/2·cosθ) を通る直線 AP が xy 平面と交わるとき、その交点を Q とする。θ が -π/4 < θ < π/4 の範囲を動くときの点 Q の軌跡を求め、その軌跡を xy 平面上に図示せよ。",
+        id: 14, universityId: 2, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 5, questionLabel: "ç¬¬5å", difficulty: 4,
+        problemText: "Î¸ ã¯å®æ°ã¨ãããxyz ç©ºéã®2ç¹ A(0, 0, â2/4), P(cosÎ¸, sinÎ¸, 1/2Â·cosÎ¸) ãéãç´ç· AP ã xy å¹³é¢ã¨äº¤ããã¨ãããã®äº¤ç¹ã Q ã¨ãããÎ¸ ã -Ï/4 < Î¸ < Ï/4 ã®ç¯å²ãåãã¨ãã®ç¹ Q ã®è»è·¡ãæ±ãããã®è»è·¡ã xy å¹³é¢ä¸ã«å³ç¤ºããã",
         tagIds: [5, 8, 20, 25, 47],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Kdai/Kdai_ri_2025.pdf",
       },
       {
-        id: 15, universityId: 2, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 6, questionLabel: "第6問", difficulty: 4,
-        problemText: "n は 2 以上の整数とする。1枚の硬貨を続けて n 回投げる。このとき、k 回目 (1 ≤ k ≤ n) に表が出たら X_k = 1, 裏が出たら X_k = 0 として、X_1, X_2, ..., X_n を定める。Y_n = Σ(k=2 to n) X_{k-1}·X_k とするとき、Y_n が奇数である確率 p_n を求めよ。",
+        id: 15, universityId: 2, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 6, questionLabel: "ç¬¬6å", difficulty: 4,
+        problemText: "n ã¯ 2 ä»¥ä¸ã®æ´æ°ã¨ããã1æã®ç¡¬è²¨ãç¶ãã¦ n åæããããã®ã¨ããk åç® (1 â¤ k â¤ n) ã«è¡¨ãåºãã X_k = 1, è£ãåºãã X_k = 0 ã¨ãã¦ãX_1, X_2, ..., X_n ãå®ãããY_n = Î£(k=2 to n) X_{k-1}Â·X_k ã¨ããã¨ããY_n ãå¥æ°ã§ããç¢ºç p_n ãæ±ããã",
         tagIds: [3, 29, 44, 48],
         youtubeLinks: [],
-        sourceUrl: "http://kumamoto.s12.xrea.com/N/Odai/Odai_ri_2025.pdf",
+        sourceUrl: "http://kumamoto.s12.xrea.com/N/Kdai/Kdai_ri_2025.pdf",
       },
 
-      // ─── 大阪大学 2025 ─────────────────────────────────
+      // âââ å¤§éªå¤§å­¦ 2025 âââââââââââââââââââââââââââââââââ
       {
-        id: 16, universityId: 3, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 1, questionLabel: "第1問", difficulty: 3,
-        problemText: "平面上に3点 O(0,0), A(3,0), B(1,2) をとる。s, t を実数とし、点 P を OP→ = s·OA→ + t·OB→ で定める。(1) s + t = 1 かつ 0 ≤ s ≤ 1 のとき、点 P の軌跡を求めよ。(2) s² + t² ≤ 1 のとき、点 P の存在する領域の面積を求めよ。",
+        id: 16, universityId: 3, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 1, questionLabel: "ç¬¬1å", difficulty: 3,
+        problemText: "å¹³é¢ä¸ã«3ç¹ O(0,0), A(3,0), B(1,2) ãã¨ããs, t ãå®æ°ã¨ããç¹ P ã OPâ = sÂ·OAâ + tÂ·OBâ ã§å®ããã(1) s + t = 1 ãã¤ 0 â¤ s â¤ 1 ã®ã¨ããç¹ P ã®è»è·¡ãæ±ããã(2) sÂ² + tÂ² â¤ 1 ã®ã¨ããç¹ P ã®å­å¨ããé åã®é¢ç©ãæ±ããã",
         tagIds: [5, 8, 34, 31, 47],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Odai/Odai_ri_2025.pdf",
       },
       {
-        id: 17, universityId: 3, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 3, questionLabel: "第3問", difficulty: 4,
-        problemText: "a を実数とする。3次関数 f(x) = x³ - 3ax について考える。(1) f(x) の極値が存在するための a の条件を求め、そのとき極大値と極小値を a を用いて表せ。(2) a > 0 のとき、曲線 y = f(x) 上の変曲点を P とする。点 P を通り傾きが f'(P の x 座標) に等しい直線 l と曲線 y = f(x) で囲まれた2つの図形の面積の和を a を用いて表せ。",
+        id: 17, universityId: 3, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 3, questionLabel: "ç¬¬3å", difficulty: 4,
+        problemText: "a ãå®æ°ã¨ããã3æ¬¡é¢æ° f(x) = xÂ³ - 3ax ã«ã¤ãã¦èããã(1) f(x) ã®æ¥µå¤ãå­å¨ããããã® a ã®æ¡ä»¶ãæ±ãããã®ã¨ãæ¥µå¤§å¤ã¨æ¥µå°å¤ã a ãç¨ãã¦è¡¨ãã(2) a > 0 ã®ã¨ããæ²ç· y = f(x) ä¸ã®å¤æ²ç¹ã P ã¨ãããç¹ P ãéãå¾ãã f'(P ã® x åº§æ¨) ã«ç­ããç´ç· l ã¨æ²ç· y = f(x) ã§å²ã¾ãã2ã¤ã®å³å½¢ã®é¢ç©ã®åã a ãç¨ãã¦è¡¨ãã",
         tagIds: [1, 34, 31, 47, 43],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Odai/Odai_ri_2025.pdf",
       },
       {
-        id: 18, universityId: 3, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 5, questionLabel: "第5問", difficulty: 4,
-        problemText: "1つのサイコロを繰り返し投げる。n 回目に出た目を X_n とし、S_n = X_1 + X_2 + ... + X_n とおく。(1) S_n が3の倍数となる確率 p_n を n で表せ。(2) a_n = p_n - 1/3 とおくとき、a_n を n を用いて表せ。(3) S_n が3の倍数かつ偶数となる確率 q_n を求めよ。",
+        id: 18, universityId: 3, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 5, questionLabel: "ç¬¬5å", difficulty: 4,
+        problemText: "1ã¤ã®ãµã¤ã³ã­ãç¹°ãè¿ãæãããn åç®ã«åºãç®ã X_n ã¨ããS_n = X_1 + X_2 + ... + X_n ã¨ããã(1) S_n ã3ã®åæ°ã¨ãªãç¢ºç p_n ã n ã§è¡¨ãã(2) a_n = p_n - 1/3 ã¨ããã¨ããa_n ã n ãç¨ãã¦è¡¨ãã(3) S_n ã3ã®åæ°ãã¤å¶æ°ã¨ãªãç¢ºç q_n ãæ±ããã",
         tagIds: [3, 29, 44, 49],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Odai/Odai_ri_2025.pdf",
       },
 
-      // ─── 東北大学 2025 ─────────────────────────────────
+      // âââ æ±åå¤§å­¦ 2025 âââââââââââââââââââââââââââââââââ
       {
-        id: 19, universityId: 4, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 1, questionLabel: "第1問", difficulty: 3,
-        problemText: "次の極限値を求めよ。(1) lim(n→∞) n·sin(π/n²)·(1 + cos(π/n)). (2) 関数 f(x) = (e^x - 1 - x)/x² (x ≠ 0), f(0) = 1/2 について、f'(0) を求めよ。さらに曲線 y = f(x) の x = 0 における接線を求めよ。",
+        id: 19, universityId: 4, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 1, questionLabel: "ç¬¬1å", difficulty: 3,
+        problemText: "æ¬¡ã®æ¥µéå¤ãæ±ããã(1) lim(nââ) nÂ·sin(Ï/nÂ²)Â·(1 + cos(Ï/n)). (2) é¢æ° f(x) = (e^x - 1 - x)/xÂ² (x â  0), f(0) = 1/2 ã«ã¤ãã¦ãf'(0) ãæ±ãããããã«æ²ç· y = f(x) ã® x = 0 ã«ãããæ¥ç·ãæ±ããã",
         tagIds: [12, 14, 32, 43],
         youtubeLinks: [],
         sourceUrl: "https://www.osaka-u.ac.jp/ja/admissions/faculty/general/pastexam-answer",
       },
       {
-        id: 20, universityId: 4, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 2, questionLabel: "第2問", difficulty: 3,
-        problemText: "a > 0 とする。曲線 C: y = x³ - 3x と直線 l: y = a(x - 1) について考える。(1) 直線 l と曲線 C の交点をすべて求めよ。(2) 直線 l と曲線 C で囲まれる図形の面積を a を用いて表せ。(3) (2)で求めた面積を最小にする a の値と、そのときの面積を求めよ。",
-        tagIds: [1, 14, 34, 31, 47],
+        id: 20, universityId: 4, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 2, questionLabel: "ç¬¬2å", difficulty: 3,
+        problemText: "a > 0 ã¨ãããæ²ç· C: y = xÂ³ - 3x ã¨ç´ç· l: y = a(x - 1) ã«ã¤ãã¦èããã(1) ç´ç· l ã¨æ²ç· C ã®äº¤ç¹ããã¹ã¦æ±ããã(2) ç´ç· l ã¨æ²ç· C ã§å²ã¾ããå³å½¢ã®é¢ç©ã a ãç¨ãã¦è¡¨ãã(3) (2)ã§æ±ããé¢ç©ãæå°ã«ãã a ã®å¤ã¨ããã®ã¨ãã®é¢ç©ãæ±ããã",
+        tagIds: [1, 14, 34, 31, 43],
         youtubeLinks: [],
         sourceUrl: "https://www.osaka-u.ac.jp/ja/admissions/faculty/general/pastexam-answer",
       },
       {
-        id: 21, universityId: 4, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 4, questionLabel: "第4問", difficulty: 4,
-        problemText: "袋の中に赤玉 2 個、白玉 2 個、青玉 1 個が入っている。袋から玉を 1 個取り出し、色を確認して元に戻す操作を繰り返す。n 回操作を行ったとき、取り出した玉の色の種類がちょうど 2 種類以下である確率 p_n を求めよ。",
+        id: 21, universityId: 4, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 4, questionLabel: "ç¬¬4å", difficulty: 4,
+        problemText: "è¢ã®ä¸­ã«èµ¤ç 2 åãç½ç 2 åãéç 1 åãå¥ã£ã¦ãããè¢ããçã 1 ååãåºããè²ãç¢ºèªãã¦åã«æ»ãæä½ãç¹°ãè¿ããn åæä½ãè¡ã£ãã¨ããåãåºããçã®è²ã®ç¨®é¡ãã¡ããã© 2 ç¨®é¡ä»¥ä¸ã§ããç¢ºç p_n ãæ±ããã",
         tagIds: [3, 29, 11, 44],
         youtubeLinks: [],
         sourceUrl: "https://www.osaka-u.ac.jp/ja/admissions/faculty/general/pastexam-answer",
       },
 
-      // ─── 北海道大学 2025 ─────────────────────────────────
+      // âââ åæµ·éå¤§å­¦ 2025 âââââââââââââââââââââââââââââââââ
       {
-        id: 22, universityId: 5, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 1, questionLabel: "第1問", difficulty: 2,
-        problemText: "a を正の実数とする。曲線 C₁: y = x² - a と C₂: y = -x² + a が囲む領域の面積 S(a) を求めよ。また a → 0 のとき S(a)/a^(3/2) の極限値を求めよ。",
+        id: 22, universityId: 5, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 1, questionLabel: "ç¬¬1å", difficulty: 2,
+        problemText: "a ãæ­£ã®å®æ°ã¨ãããæ²ç· Câ: y = xÂ² - a ã¨ Câ: y = -xÂ² + a ãå²ãé åã®é¢ç© S(a) ãæ±ãããã¾ã a â 0 ã®ã¨ã S(a)/a^(3/2) ã®æ¥µéå¤ãæ±ããã",
         tagIds: [15, 34, 12, 43],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/HKdai/HKdai_ri_2025.pdf",
       },
       {
-        id: 23, universityId: 5, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 2, questionLabel: "第2問", difficulty: 3,
-        problemText: "xyz 空間内の4点 O(0,0,0), A(1,0,0), B(0,1,0), C(0,0,1) を頂点とする四面体 OABC を考える。辺 OA, OB, OC をそれぞれ 1:2 に内分する点を P, Q, R とする。(1) 3点 P, Q, R を通る平面の方程式を求めよ。(2) 四面体 OABC を平面 PQR で切ったとき、頂点 O を含む立体の体積を求めよ。",
+        id: 23, universityId: 5, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 2, questionLabel: "ç¬¬2å", difficulty: 3,
+        problemText: "xyz ç©ºéåã®4ç¹ O(0,0,0), A(1,0,0), B(0,1,0), C(0,0,1) ãé ç¹ã¨ããåé¢ä½ OABC ãèãããè¾º OA, OB, OC ããããã 1:2 ã«ååããç¹ã P, Q, R ã¨ããã(1) 3ç¹ P, Q, R ãéãå¹³é¢ã®æ¹ç¨å¼ãæ±ããã(2) åé¢ä½ OABC ãå¹³é¢ PQR ã§åã£ãã¨ããé ç¹ O ãå«ãç«ä½ã®ä½ç©ãæ±ããã",
         tagIds: [5, 13, 25, 43],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/HKdai/HKdai_ri_2025.pdf",
       },
       {
-        id: 24, universityId: 5, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 5, questionLabel: "第5問", difficulty: 3,
-        problemText: "n を正の整数とする。数列 {a_n} を a_1 = 1, a_{n+1} = (2a_n + 3)/(a_n + 2) で定める。(1) a_n > 0 をすべての正の整数 n に対して示せ。(2) b_n = a_n - √3 とおくとき、b_{n+1}/b_n の値を求め、数列 {b_n} の一般項を n を用いて表せ。(3) 数列 {a_n} の極限 lim(n→∞) a_n を求めよ。",
-        tagIds: [6, 29, 12, 47],
+        id: 24, universityId: 5, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 5, questionLabel: "ç¬¬5å", difficulty: 3,
+        problemText: "n ãæ­£ã®æ´æ°ã¨ãããæ°å {a_n} ã a_1 = 1, a_{n+1} = (2a_n + 3)/(a_n + 2) ã§å®ããã(1) a_n > 0 ããã¹ã¦ã®æ­£ã®æ´æ° n ã«å¯¾ãã¦ç¤ºãã(2) b_n = a_n - â3 ã¨ããã¨ããb_{n+1}/b_n ã®å¤ãæ±ããæ°å {b_n} ã®ä¸è¬é ã n ãç¨ãã¦è¡¨ãã(3) æ°å {a_n} ã®æ¥µé lim(nââ) a_n ãæ±ããã",
+        tagIds: [6, 29, 12, 43],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/HKdai/HKdai_ri_2025.pdf",
       },
 
-      // ─── 九州大学 2025 ─────────────────────────────────
+      // âââ ä¹å·å¤§å­¦ 2025 âââââââââââââââââââââââââââââââââ
       {
-        id: 25, universityId: 8, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 1, questionLabel: "第1問", difficulty: 3,
-        problemText: "k を正の整数とする。k が奇数のとき f(k) = 3k + 1, k が偶数のとき f(k) = k/2 と定める。正の整数 a に対して、a, f(a), f(f(a)), ... という数列を考える。(1) a = 6 のとき、1 に初めて到達するまでの項数を求めよ。(2) a₁ = a, a_{n+1} = f(a_n) として、a が 2 の冪 (2^m) の形のとき、この数列が 1 に到達することを示せ。",
+        id: 25, universityId: 8, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 1, questionLabel: "ç¬¬1å", difficulty: 3,
+        problemText: "k ãæ­£ã®æ´æ°ã¨ãããk ãå¥æ°ã®ã¨ã f(k) = 3k + 1, k ãå¶æ°ã®ã¨ã f(k) = k/2 ã¨å®ãããæ­£ã®æ´æ° a ã«å¯¾ãã¦ãa, f(a), f(f(a)), ... ã¨ããæ°åãèããã(1) a = 6 ã®ã¨ãã1 ã«åãã¦å°éããã¾ã§ã®é æ°ãæ±ããã(2) aâ = a, a_{n+1} = f(a_n) ã¨ãã¦ãa ã 2 ã®åª (2^m) ã®å½¢ã®ã¨ãããã®æ°åã 1 ã«å°éãããã¨ãç¤ºãã",
         tagIds: [4, 6, 28, 44, 40],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/nyusi/Qdai_ri_2025.pdf",
       },
       {
-        id: 26, universityId: 8, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 3, questionLabel: "第3問", difficulty: 3,
-        problemText: "0 < α < π/2 とする。定積分 I(α) = ∫₀^(π/2) log(sinx + sinα) dx を求めよ。ただし必要ならば ∫₀^(π/2) log(sinx) dx = -(π/2)log 2 を用いてよい。",
-        tagIds: [2, 16, 26, 47],
+        id: 26, universityId: 8, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 3, questionLabel: "ç¬¬3å", difficulty: 3,
+        problemText: "0 < Î± < Ï/2 ã¨ãããå®ç©å I(Î±) = â«â^(Ï/2) log(sinx + sinÎ±) dx ãæ±ããããã ãå¿è¦ãªãã° â«â^(Ï/2) log(sinx) dx = -(Ï/2)log 2 ãç¨ãã¦ããã",
+        tagIds: [2, 16, 26, 43],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/nyusi/Qdai_ri_2025.pdf",
-      },
+    2 },
       {
-        id: 27, universityId: 8, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 5, questionLabel: "第5問", difficulty: 4,
-        problemText: "1辺の長さが 1 の正三角形 ABC の内部および周上の点 P に対して、PA², PB², PC² の値は P の位置に依存する。(1) PA² + PB² + PC² = k（定数）であることを示し、k の値を求めよ。(2) PA²·PB²·PC² を最大にする点 P の位置と最大値を求めよ。",
+        id: 27, universityId: 8, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 5, questionLabel: "ç¬¬5å", difficulty: 4,
+        problemText: "1è¾ºã®é·ãã 1 ã®æ­£ä¸è§å½¢ ABC ã®åé¨ããã³å¨ä¸ã®ç¹ P ã«å¯¾ãã¦ãPAÂ², PBÂ², PCÂ² ã®å¤ã¯ P ã®ä½ç½®ã«ä¾å­ããã(1) PAÂ² + PBÂ² + PCÂ² = kï¼å®æ°ï¼ã§ãããã¨ãç¤ºããk ã®å¤ãæ±ããã(2) PAÂ²Â·PBÂ²Â·PCÂ² ãæå¤§ã«ããç¹ P ã®ä½ç½®ã¨æå¤§å¤ãæ±ããã",
         tagIds: [13, 8, 22, 25, 47],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/nyusi/Qdai_ri_2025.pdf",
       },
 
-      // ─── 名古屋大学 2025 ─────────────────────────────────
+      // âââ åå¤å±å¤§å­¦ 2025 âââââââââââââââââââââââââââââââââ
       {
-        id: 28, universityId: 9, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 1, questionLabel: "第1問", difficulty: 3,
-        problemText: "a は実数とする。方程式 x⁴ - 4x² + a = 0 について考える。(1) t = x² とおき、t の2次方程式を導け。(2) もとの方程式が異なる4つの実数解をもつための a の範囲を求めよ。(3) 4つの実数解を α₁ ≤ α₂ ≤ α₃ ≤ α₄ とするとき、α₁α₂α₃α₄ と α₁ + α₄ を a を用いて表せ。",
+        id: 28, universityId: 9, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 1, questionLabel: "ç¬¬1å", difficulty: 3,
+        problemText: "a ã¯å®æ°ã¨ãããæ¹ç¨å¼ xâ´ - 4xÂ² + a = 0 ã«ã¤ãã¦èããã(1) t = xÂ² ã¨ãããt ã®2æ¬¡æ¹ç¨å¼ãå°ãã(2) ãã¨ã®æ¹ç¨å¼ãç°ãªã4ã¤ã®å®æ°è§£ããã¤ããã® a ã®ç¯å²ãæ±ããã(3) 4ã¤ã®å®æ°è§£ã Î±â â¤ Î±â â¤ Î±â â¤ Î±â ã¨ããã¨ããÎ±âÎ±âÎ±âÎ±â ã¨ Î±â + Î±â ã a ãç¨ãã¦è¡¨ãã",
         tagIds: [14, 31, 28, 43],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Ndai/Ndai_ri_2025.pdf",
       },
-      {
-        id: 29, universityId: 9, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 2, questionLabel: "第2問", difficulty: 3,
-        problemText: "複素数 z = cosθ + i·sinθ (0 < θ < π) について考える。w = z + 1/z とおく。(1) w を θ を用いて表せ。(2) θ が 0 < θ < π の範囲を動くとき、複素数平面上の w の軌跡を求めよ。(3) w³ + w の虚部を θ を用いて表し、その最大値を求めよ。",
+  2   {
+        id: 29, universityId: 9, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 2, questionLabel: "ç¬¬2å", difficulty: 3,
+        problemText: "è¤ç´ æ° z = cosÎ¸ + iÂ·sinÎ¸ (0 < Î¸ < Ï) ã«ã¤ãã¦èãããw = z + 1/z ã¨ããã(1) w ã Î¸ ãç¨ãã¦è¡¨ãã(2) Î¸ ã 0 < Î¸ < Ï ã®ç¯å²ãåãã¨ããè¤ç´ æ°å¹³é¢ä¸ã® w ã®è»è·¡ãæ±ããã(3) wÂ³ + w ã®èé¨ã Î¸ ãç¨ãã¦è¡¨ãããã®æå¤§å¤ãæ±ããã",
         tagIds: [7, 25, 9, 47],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Ndai/Ndai_ri_2025.pdf",
       },
       {
-        id: 30, universityId: 9, year: 2025, examType: "前期", examCategory: "理系",
-        questionNumber: 4, questionLabel: "第4問", difficulty: 4,
-        problemText: "x ≥ 0 の範囲で定義された関数 f(x) = x·e^(-x²) について考える。(1) f(x) の増減を調べ、最大値を求めよ。(2) 曲線 y = f(x) と x 軸で囲まれた図形の面積 S を求めよ。(3) 自然数 n に対して、I_n = ∫₀^∞ x^n·e^(-x²) dx とおく。I_n と I_{n-2} の関係式を求め、I_4 の値を求めよ。",
+        id: 30, universityId: 9, year: 2025, examType: "åæ", examCategory: "çç³»",
+        questionNumber: 4, questionLabel: "ç¬¬4å", difficulty: 4,
+        problemText: "x â¥ 0 ã®ç¯å²ã§å®ç¾©ãããé¢æ° f(x) = xÂ·e^(-xÂ²) ã«ã¤ãã¦èããã(1) f(x) ã®å¢æ¸ãèª¿ã¹ãæå¤§å¤ãæ±ããã(2) æ²ç· y = f(x) ã¨ x è»¸ã§å²ã¾ããå³å½¢ã®é¢ç© S ãæ±ããã(3) èªç¶æ° n ã«å¯¾ãã¦ãI_n = â«â^â x^nÂ·e^(-xÂ²) dx ã¨ãããI_n ã¨ I_{n-2} ã®é¢ä¿å¼ãæ±ããI_4 ã®å¤ãæ±ããã",
         tagIds: [1, 2, 34, 26, 44],
         youtubeLinks: [],
         sourceUrl: "http://kumamoto.s12.xrea.com/N/Ndai/Ndai_ri_2025.pdf",
       },
     ];
 
-    // ─── ユーティリティ ─────────────────────────────────────
+    // âââ ã¦ã¼ãã£ãªãã£ âââââââââââââââââââââââââââââââââââââ
     const getTag = (id) => TAGS.find((t) => t.id === id);
     const getUni = (id) => UNIVERSITIES.find((u) => u.id === id);
     const Stars = ({ n }) => (
       <span style={{ color: "#fbbf24", letterSpacing: 1 }}>
-        {"★".repeat(n)}{"☆".repeat(5 - n)}
+        {"â".repeat(n)}{"â".repeat(5 - n)}
       </span>
     );
 
@@ -414,7 +424,7 @@
       return `${m}:${s.toString().padStart(2, "0")}`;
     };
 
-    // ─── スタイル定数 ────────────────────────────────────────
+    // âââ ã¹ã¿ã¤ã«å®æ° ââââââââââââââââââââââââââââââââââââââââ
     const C = {
       bg: "#0f0f1a",
       card: "#1a1a2e",
@@ -433,9 +443,9 @@
       green: "#22c55e",
     };
 
-    // ─── コンポーネント ──────────────────────────────────────
+    // âââ ã³ã³ãã¼ãã³ã ââââââââââââââââââââââââââââââââââââââ
 
-    // タグピル
+    // ã¿ã°ãã«
     const TagPill = ({ tag, selected, onClick, small }) => {
       const color = tag.layer === 1 ? C.tagField : tag.layer === 2 ? C.tagTech : C.tagProp;
       return (
@@ -459,7 +469,7 @@
       );
     };
 
-    // 問題カード
+    // åé¡ã«ã¼ã
     const ProblemCard = ({ problem, onClick }) => {
       const uni = getUni(problem.universityId);
       const tags = problem.tagIds.map(getTag).filter(Boolean).slice(0, 3);
@@ -480,7 +490,7 @@
             flexDirection: "column",
           }}
           onMouseEnter={(e) => { e.currentTarget.style.background = C.cardHover; e.currentTarget.style.transform = "translateY(-2px)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = C.card; e.currentTarget.style.transform = "translateX(0)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = C.card; e.currentTarget.style.transform = "translateY(0)"; }}
         >
           
           <div style={{ height: 4, background: uni?.color || C.accent }} />
@@ -493,9 +503,9 @@
               </span>
               <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                 <span style={{
-                  background: problem.examCategory === "理系" ? "#1d4ed822" : "#be185d22",
-                  color: problem.examCategory === "理系" ? "#60a5fa" : "#f472b6",
-                  border: `1px solid ${problem.examCategory === "理系" ? "#3b82f655" : "#ec489955"}`,
+            2     background: problem.examCategory === "çç³»" ? "#1d4ed822" : "#be185d22",
+                  color: problem.examCategory === "çç³»" ? "#60a5fa" : "#f472b6",
+                  border: `1px solid ${problem.examCategory === "çç³»" ? "#3b82f655" : "#ec489955"}`,
                   borderRadius: 4, padding: "1px 6px", fontSize: 11, fontWeight: 700,
                 }}>{problem.examCategory}</span>
                 <span style={{ color: C.textMuted, fontSize: 12 }}>{problem.questionLabel}</span>
@@ -504,13 +514,13 @@
 
             
             <p style={{ color: C.text, fontSize: 13, lineHeight: 1.6, margin: "0 0 12px 0", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-              {problem.problemText.replace(/\\\\/g, "").replace(/\\[a-z]+/g, "").replace(/[{}^_]/g, "").slice(0, 120)}...
+      2       {problem.problemText.replace(/\\\\/g, "").replace(/\\[a-z]+/g, "").replace(/[{}^_]/g, "").slice(0, 120)}...
             </p>
 
             
             <div style={{ marginBottom: 8 }}>
               <Stars n={problem.difficulty} />
-              <span style={{ color: C.textMuted, fontSize: 11, marginLeft: 8 }}>難易度 {problem.difficulty}/5</span>
+              <span style={{ color: C.textMuted, fontSize: 11, marginLeft: 8 }}>é£æåº¦ {problem.difficulty}/5</span>
             </div>
 
             
@@ -523,7 +533,7 @@
             
             {hasVideo && (
               <div style={{ color: C.accent, fontSize: 12, fontWeight: 600 }}>
-                ▶ 動画解説あり（{problem.youtubeLinks.length}本）
+    2           â¶ åç»è§£èª¬ããï¼{problem.youtubeLinks.length}æ¬ï¼
               </div>
             )}
           </div>
@@ -531,7 +541,7 @@
       );
     };
 
-    // ─── メインアプリ ────────────────────────────────────────
+    // âââ ã¡ã¤ã³ã¢ããª ââââââââââââââââââââââââââââââââââââââââ
     function App() {
       const [page, setPage] = useState("home");
       const [selectedProblem, setSelectedProblem] = useState(null);
@@ -546,7 +556,7 @@
       const [revealStep, setRevealStep] = useState(0);
       const [showFilter, setShowFilter] = useState(false);
 
-      // フィルタリング
+      // ãã£ã«ã¿ãªã³ã°
       const filtered = useMemo(() => {
         let result = [...PROBLEMS];
 
@@ -586,13 +596,13 @@
             case "year-desc": return b.year - a.year || b.questionNumber - a.questionNumber;
             case "year-asc": return a.year - b.year || a.questionNumber - b.questionNumber;
             default: return b.difficulty - a.difficulty;
-          }
+ 2        }
         });
 
         return result;
       }, [searchQuery, selectedTags, selectedUnis, selectedDifficulties, selectedCategories, sortBy]);
 
-      const toggleTag = (id) => setSelectedTags((prev) => prev.includes(id) ? prev.filter((t) => t !== id) : [....prev, d]);
+      const toggleTag = (id) => setSelectedTags((prev) => prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]);
       const toggleUni = (id) => setSelectedUnis((prev) => prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]);
       const toggleDifficulty = (d) => setSelectedDifficulties((prev) => prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]);
       const toggleCategory = (c) => setSelectedCategories((prev) => prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]);
@@ -612,23 +622,23 @@
         setPage("detail");
       };
 
-      // ─── ナビバー ──────────────────
+      // âââ ãããã¼ ââââââââââââââââââ
       const Navbar = () => (
         <div style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "0 12px", position: "sticky", top: 0, zIndex: 100 }}>
           <div className="navbar-inner" style={{ maxWidth: 1400, margin: "0 auto", display: "flex", alignItems: "center", height: 56, gap: 16 }}>
-            
+        2   
             <div
               onClick={() => { setPage("home"); setSelectedTags([]); setSelectedUnis([]); setSelectedDifficulties([]); setSearchQuery(""); }}
               style={{ color: C.accent, fontWeight: 800, fontSize: 20, cursor: "pointer", whiteSpace: "nowrap", letterSpacing: -0.5 }}
             >
-              数超 DB
+              æ°è¶ DB
             </div>
 
             
-            <div className="nav-buttons" style={{ display: "flex", gap: 4 }}>
+     2      <div className="nav-buttons" style={{ display: "flex", gap: 4 }}>
               {[
-                { label: "ホーム", key: "home" },
-                { label: "ブラインド特訓", key: "blind-start" },
+                { label: "ãã¼ã ", key: "home" },
+                { label: "ãã©ã¤ã³ãç¹è¨", key: "blind-start" },
               ].map((item) => (
                 <button
                   key={item.key}
@@ -652,17 +662,17 @@
 
             <div className="navbar-right" style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center" }}>
               
-              <input
+            2 <input
                 className="navbar-search"
                 type="text"
-                placeholder="検索..."
+                placeholder="æ¤ç´¢..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
                   background: C.card,
                   color: C.text,
                   border: `1px solid ${C.border}`,
-                  borderRadius: 8,
+        2         borderRadius: 8,
                   padding: "8px 12px",
                   fontSize: 13,
                   width: 200,
@@ -687,14 +697,14 @@
                   transition: "all 0.15s",
                 }}
               >
-                フィルタ
+                ãã£ã«ã¿
               </button>
             </div>
           </div>
         </div>
       );
 
-      // ─── ホームページ ──────────────────
+      // âââ ãã¼ã ãã¼ã¸ ââââââââââââââââââ
       const HomePage = () => (
         <div style={{ background: C.bg, minHeight: "100vh", paddingTop: 16 }}>
           <Navbar />
@@ -705,7 +715,7 @@
               <div style={{ maxWidth: 1400, margin: "0 auto" }}>
                 
                 <div style={{ marginBottom: 20 }}>
-                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>大学</div>
+                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>å¤§å­¦</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {UNIVERSITIES.map((uni) => (
                       <TagPill
@@ -720,17 +730,36 @@
 
 
                 <div style={{ marginBottom: 20 }}>
-                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>文理</div>
-                  <div style=z�\�^N���^��^ܘ\��ܘ\��\�_O���ȹ�!���ȋ������ȗK�X\
+                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>æç</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {["çç³»", "æç³»"].map((cat) => {
+                      const isSelected = selectedCategories.includes(cat);
+                      const color = cat === "çç³»" ? "#60a5fa" : "#f472b6";
+                      const bg = cat === "çç³»" ? "#1d4ed8" : "#be185d";
+                      return (
+                        <button
+                          key={cat}
+                          onClick={() => toggleCategory(cat)}
+                          style={{
+                            background: isSelected ? bg : C.card,
+                            color: isSelected ? "#fff" : color,
+                            border: `1px solid ${isSelected ? bg : color + "66"}`,
+                            borderRadius: 6,
+                            padding: "6px 18px",
+                            fontSize: 13,
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            transition: "all 0.15s",
+                          }}
+                        >{cat}</button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-�]
-HO��ۜ�\��[X�YH�[X�Y�]Y�ܚY\˚[��Y\��]
-N�ۜ���܈H�]OOH��!���Ȉ��͌MY�H���ٍ̘����ۜ���H�]OOH��!���Ȉ���YY���ؙLNY��]\��
-��]ۂ��^O^��]B�ې�X��^�
-HO����P�]Y�ܞJ�]
-_B��[O^��X��ܛ�[��\��[X�Y����˘�\����܎�\��[X�Y��ٙ������܋��ܙ\��\��Y	�\��[X�Y������܈
-�����X��ܙ\��Y]\Έ��Y[�Έ��N���۝�^�N�L���\��܎���[�\����۝�ZY�����[��][ێ��[�M\ȋ�_B����]O؝]ۏ��
-NJ_B��]����]�����]��[O^��X\��[����N��_O��         <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>難易度</div>
+
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>é£æåº¦</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {[1, 2, 3, 4, 5].map((d) => (
                       <button
@@ -756,7 +785,7 @@ NJ_B��]����]�����
 
                 
                 <div>
-                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>タグ</div>
+                  <div style={{ color: C.text, fontWeight: 600, marginBottom: 8, fontSize: 13 }}>ã¿ã°</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {TAGS.slice(0, 20).map((tag) => (
                       <TagPill
@@ -776,12 +805,12 @@ NJ_B��]����]�����
           <div style={{ maxWidth: 1400, margin: "0 auto", padding: "20px 12px" }}>
             
             <div className="sort-row" style={{ marginBottom: 20, display: "flex", gap: 8, alignItems: "center", overflowX: "auto", WebkitOverflowScrolling: "touch", paddingBottom: 4 }}>
-              <span style={{ color: C.textMuted, fontSize: 13, whiteSpace: "nowrap", flexShrink: 0 }}>ソート:</span>
+              <span style={{ color: C.textMuted, fontSize: 13, whiteSpace: "nowrap", flexShrink: 0 }}>ã½ã¼ã:</span>
               {[
-                { label: "難易度（高→低）", key: "difficulty-desc" },
-                { label: "難易度（低→高）", key: "difficulty-asc" },
-                { label: "年度（新→旧）", key: "year-desc" },
-                { label: "年度（旧→新）", key: "year-asc" },
+                { label: "é£æåº¦ï¼é«âä½ï¼", key: "difficulty-desc" },
+                { label: "é£æåº¦ï¼ä½âé«ï¼", key: "difficulty-asc" },
+                { label: "å¹´åº¦ï¼æ°âæ§ï¼", key: "year-desc" },
+                { label: "å¹´åº¦ï¼æ§âæ°ï¼", key: "year-asc" },
               ].map((item) => (
                 <button
                   key={item.key}
@@ -807,7 +836,7 @@ NJ_B��]����]�����
 
             
             <div style={{ color: C.textMuted, marginBottom: 16, fontSize: 12 }}>
-              {filtered.length} 件の問題
+              {filtered.length} ä»¶ã®åé¡
             </div>
 
             
@@ -820,7 +849,7 @@ NJ_B��]����]�����
         </div>
       );
 
-      // ─── 詳細ページ ──────────────────
+      // âââ è©³ç´°ãã¼ã¸ ââââââââââââââââââ
       const DetailPage = () => {
         const p = selectedProblem;
         if (!p) return null;
@@ -847,7 +876,7 @@ NJ_B��]����]�����
                   fontWeight: 600,
                 }}
               >
-                ← ホームに戻る
+                â ãã¼ã ã«æ»ã
               </button>
 
               
@@ -860,7 +889,7 @@ NJ_B��]����]�����
                 </h1>
                 <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
                   <Stars n={p.difficulty} />
-                  <span style={{ color: C.textMuted, fontSize: 12 }}>難易度 {p.difficulty}/5</span>
+                  <span style={{ color: C.textMuted, fontSize: 12 }}>é£æåº¦ {p.difficulty}/5</span>
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {tags.map((tag) => (
@@ -872,7 +901,7 @@ NJ_B��]����]�����
               
               <div style={{ marginBottom: 24 }}>
                 <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-                  {["問題のみ", "解き方", "解法", "解答"].map((label, i) => (
+                  {["åé¡ã®ã¿", "è§£ãæ¹", "è§£æ³", "è§£ç­"].map((label, i) => (
                     <div
                       key={i}
                       onClick={() => setRevealStep(i)}
@@ -888,7 +917,7 @@ NJ_B��]����]�����
                   ))}
                 </div>
                 <div style={{ color: C.textMuted, fontSize: 12 }}>
-                  {["問題のみ", "解き方", "解法", "解答"][revealStep]}
+                  {["åé¡ã®ã¿", "è§£ãæ¹", "è§£æ³", "è§£ç­"][revealStep]}
                 </div>
               </div>
 
@@ -896,7 +925,7 @@ NJ_B��]����]�����
               <div style={{ background: C.card, borderRadius: 12, padding: 20, marginBottom: 24, border: `1px solid ${C.border}` }}>
                 
                 <div style={{ marginBottom: 20 }}>
-                  <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>問題文</div>
+                  <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>åé¡æ</div>
                   <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
                     {p.problemText}
                   </p>
@@ -905,7 +934,7 @@ NJ_B��]����]�����
                 
                 {revealStep >= 1 && (
                   <div style={{ marginBottom: 20, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
-                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解き方（ヒント）</div>
+                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>è§£ãæ¹ï¼ãã³ãï¼</div>
                     <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
                       {p.solutionHint}
                     </p>
@@ -915,7 +944,7 @@ NJ_B��]����]�����
                 
                 {revealStep >= 2 && (
                   <div style={{ marginBottom: 20, paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
-                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解法</div>
+                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>è§£æ³</div>
                     <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
                       {p.solutionMethod}
                     </p>
@@ -925,12 +954,12 @@ NJ_B��]����]�����
                 
                 {revealStep >= 3 && (
                   <div style={{ paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
-                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>解答（詳細）</div>
+                    <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>è§£ç­ï¼è©³ç´°ï¼</div>
                     <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
                       {p.solutionFull}
                     </p>
                     <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
-                      <div style={{ color: C.textMuted, fontWeight: :00, fontSize: 12, marginBottom: 8 }}>答え</div>
+                      <div style={{ color: C.textMuted, fontWeight: 600, fontSize: 12, marginBottom: 8 }}>ç­ã</div>
                       <div style={{ color: C.green, fontSize: 16, fontWeight: 700 }}>
                         {p.answerSummary}
                       </div>
@@ -943,7 +972,7 @@ NJ_B��]����]�����
               {p.youtubeLinks.length > 0 && (
                 <div style={{ marginBottom: 24 }}>
                   <div style={{ color: C.text, fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
-                    動画解説
+                    åç»è§£èª¬
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                     {p.youtubeLinks.map((link, i) => (
@@ -968,7 +997,7 @@ NJ_B��]����]�����
                         onMouseEnter={(e) => { e.currentTarget.style.background = C.cardHover; e.currentTarget.style.borderColor = C.accent; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = C.card; e.currentTarget.style.borderColor = C.border; }}
                       >
-                        <span style={{ fontSize: 18 }}>▶</span>
+                        <span style={{ fontSize: 18 }}>â¶</span>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 2 }}>
                             {link.channel} - {link.desc}
@@ -977,7 +1006,7 @@ NJ_B��]����]�����
                             {formatTime(link.startSec)}
                           </div>
                         </div>
-                        <span style={{ color: C.textMuted }}>→</span>
+                        <span style={{ color: C.textMuted }}>â</span>
                       </a>
                     ))}
                   </div>
@@ -1000,7 +1029,7 @@ NJ_B��]����]�����
                     transition: "all 0.2s",
                   }}
                 >
-                  ← 前の問題
+                  â åã®åé¡
                 </button>
                 <button
                   onClick={() => { const idx = PROBLEMS.findIndex((x) => x.id === p.id); if (idx < PROBLEMS.length - 1) setSelectedProblem(PROBLEMS[idx + 1]); }}
@@ -1017,7 +1046,7 @@ NJ_B��]����]�����
                     marginLeft: "auto",
                   }}
                 >
-                  次の問題 →
+                  æ¬¡ã®åé¡ â
                 </button>
               </div>
             </div>
@@ -1025,7 +1054,7 @@ NJ_B��]����]�����
         );
       };
 
-      // ─── ブラインド特訓ページ ──────────────────
+      // âââ ãã©ã¤ã³ãç¹è¨ãã¼ã¸ ââââââââââââââââââ
       const BlindPage = () => {
         if (!blindProblem) return null;
 
@@ -1049,16 +1078,16 @@ NJ_B��]����]�����
                   fontWeight: 600,
                 }}
               >
-                ← ホームに戻る
+                â ãã¼ã ã«æ»ã
               </button>
 
               <div style={{ marginBottom: 24, borderBottom: `1px solid ${C.border}`, paddingBottom: 20 }}>
                 <div style={{ color: uni?.color, fontWeight: 700, fontSize: 14, marginBottom: 8 }}>
-                  ブラインド特訓
+                  ãã©ã¤ã³ãç¹è¨
                 </div>
                 <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
                   <Stars n={blindProblem.difficulty} />
-                  <span style={{ color: C.textMuted, fontSize: 12 }}>難易度 {blindProblem.difficulty}/5</span>
+                  <span style={{ color: C.textMuted, fontSize: 12 }}>é£æåº¦ {blindProblem.difficulty}/5</span>
                 </div>
               </div>
 
@@ -1085,8 +1114,8 @@ NJ_B��]����]�����
                   onMouseEnter={(e) => { e.currentTarget.style.opacity = 0.9; }}
                   onMouseLeave={(e) => { e.currentTarget.style.opacity = 1; }}
                 >
-                  別の問題に変える
-                </[utton>
+                  å¥ã®åé¡ã«å¤ãã
+                </button>
                 <button
                   onClick={() => openDetail(blindProblem)}
                   style={{
@@ -1101,21 +1130,21 @@ NJ_B��]����]�����
                     transition: "all 0.2s",
                   }}
                 >
-                  解答を見る
-                </[utton>
+                  è§£ç­ãè¦ã
+                </button>
               </div>
             </div>
           </div>
         );
       };
 
-      // ─── ページレンダリング ──────────────────
+      // âââ ãã¼ã¸ã¬ã³ããªã³ã° ââââââââââââââââââ
       if (page === "detail") return <DetailPage />;
       if (page === "blind") return <BlindPage />;
       return <HomePage />;
     }
 
-    // ─── マウント ──────────────────────────────────────────
+    // âââ ãã¦ã³ã ââââââââââââââââââââââââââââââââââââââââââ
     ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
   </script>
 </body>
